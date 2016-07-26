@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "180845818599",
+    "project_id": "firebase-paybydata"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:180845818599:android:95c6973cb79f44bb",
+        "android_client_info": {
+          "package_name": "com.pay_by_data"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "180845818599-jo1jl6bgn8eqiatapjlfgdnirb79k2sc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pay_by_data",
+            "certificate_hash": "BECE43045BA84D831FF11D90DB18E97DF00975A1"
+          }
+        },
+        {
+          "client_id": "180845818599-aob33qcolnb66ec3e2afkjsl8drgu4sf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzsOe7Barpevf01TqSjK5msv6zbrjIG5U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

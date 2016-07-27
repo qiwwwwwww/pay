@@ -16,8 +16,8 @@ import {
 
 } from 'react-native';
 
-var REQUEST_URL ='http://129.31.204.220:3000/appstore';
-var IMG_URL='http://129.31.204.220:3000/files/';
+var REQUEST_URL ='http://129.31.200.159:3000/appstore';
+var IMG_URL='http://129.31.200.159:3000/files/';
 
 class FrontPage extends Component {
     constructor(props) {

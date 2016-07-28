@@ -11,10 +11,11 @@ var {
   TextInput,
   ActivityIndicator
 } = ReactNative;
-  
-var REQUEST_URL ='http://129.31.204.220:3000/appstore';
-var IMG_URL='http:// 129.31.204.220:3000/files/';
-var FILENAME_URL ='http://129.31.204.220:3000/filename/appstore/';
+
+var IP_ADDRESS = 'http://129.31.202.148:3000';  
+var REQUEST_URL = IP_ADDRESS+'/appstore';
+var IMG_URL=IP_ADDRESS+'/files/';
+var FILENAME_URL = IP_ADDRESS+'/filename/appstore/';
 
 
 function urlForQueryAndPage(key, value) {
@@ -62,7 +63,7 @@ class SearchPage extends Component {
   }
 
  onSearchPressed() {
-    var query = urlForQueryAndPage('place_name', this.state.searchString);
+    var query = urlForQueryAndPage('app_name', this.state.searchString);
     this._executeQuery(query);
   }
 
@@ -83,17 +84,17 @@ class SearchPage extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.description}>
-          Search for houses to buy!
+          Search for apps to download!
         </Text>
         <Text style={styles.description}>
-          Search by place-name, postcode or search near your location.
+          Search by exact app name.
         </Text>
         <View style={styles.flowRight}>
           <TextInput
             style={styles.searchInput}
             value={this.state.searchString}
             onChange={this.onSearchTextChanged.bind(this)}
-            placeholder='Search via name or postcode'/>
+            placeholder='Search via name'/>
           <TouchableHighlight style={styles.button}
               underlayColor='#99d9f4'
               onPress={this.onSearchPressed.bind(this)}

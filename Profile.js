@@ -60,10 +60,10 @@ class Profile extends Component {
         </View>
         
         <View style={styles.tabView}>
-        <TabLayoutAndroid style={{height:60}} backgroundColor="#009688" indicatorTabColor="#ffc400"
+        <TabLayoutAndroid style={{height:60}} backgroundColor="#009688" indicatorTabColor="#727272"
           indicatorTabHeight={2} scrollable={false} center={false}>
 
-          <TabAndroid text="user" textSize={16} textColor="white" selectedTextColor="#ffc400"
+          <TabAndroid text="user" textSize={16} textColor="white" selectedTextColor="#727272"
                 icon="user" iconPosition="top">
           <View style={styles.body}>
           <View style={styles.section1}>
@@ -82,7 +82,8 @@ class Profile extends Component {
           </View>
           </View>
           </TabAndroid>
-          <TabAndroid text="Favorite" textSize={16} textColor="white" selectedTextColor="#ffc400"
+
+          <TabAndroid text="Favorite" textSize={16} textColor="white" selectedTextColor="#727272"
                 icon="heart" iconPosition="top">
             <ScrollView>
             <Text>FloatingButtonAndroid Examples</Text>
@@ -98,7 +99,8 @@ class Profile extends Component {
             </Text>
             </ScrollView>
           </TabAndroid>
-          <TabAndroid text="Recent" textSize={16} textColor="white" selectedTextColor="#ffc400"
+
+          <TabAndroid text="Recent" textSize={16} textColor="white" selectedTextColor="#727272"
                 icon="fen" iconPosition="top">
             <Text>Hello, I'm the last tab: nothing to show</Text>
           </TabAndroid>
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
 separator: {
   backgroundColor: 'rgba(0, 0, 0, 0.1)',
   height: StyleSheet.hairlineWidth,
-  marginVertical: 10,
+  marginVertical: 3,
 },
 
 });

@@ -12,9 +12,11 @@ import {
   Navigator,
   TouchableHighlight
 } from 'react-native';
-  
-var REQUEST_URL ='http://129.31.200.159:3000/appstore';
-var IMG_URL='http://129.31.200.159:3000/files/';
+
+
+var IP_ADDRESS = 'http://129.31.202.148:3000';    
+var REQUEST_URL =IP_ADDRESS+'/appstore';
+var IMG_URL=IP_ADDRESS+'/files/';
 
 class OutlinePage extends Component {
     constructor(props) {

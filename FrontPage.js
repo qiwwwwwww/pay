@@ -1,4 +1,3 @@
-
 import React, {
   Component,
 } from 'react';
@@ -12,13 +11,16 @@ import {
   Navigator,
   TouchableHighlight,
   ViewPagerAndroid,
-  ScrollView
-
+  ScrollView,
+  Dimensions
 } from 'react-native';
 
-var IP_ADDRESS = 'http://129.31.202.148:3000';    
+var IP_ADDRESS = 'http://100.77.188.31:3000';    
 var REQUEST_URL =IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
+var width = Dimensions.get('window').width; //full width
+var height = Dimensions.get('window').height; //full width
+var qu_height=height*0.5;
 
 class FrontPage extends Component {
     constructor(props) {
@@ -54,21 +56,31 @@ render(object) {
   }
 
   return(
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
 
         <ViewPagerAndroid style={styles.pageStyle} initialPage={0}>
           <View style={styles.container}>
             <Image
             source={{uri:'http://pokerfuse.com/site_media/media/uploads/news/clash-of-clans_orig_full_sidebar.jpg'}}
-            style={styles.promotionStyle}
-            />
+            style={styles.promotionStyle}>
+              <Text style={styles.nestedText}>
+              App Deal of the Week
+              </Text>
+              <Text style={styles.nestedsmallText}>
+              now only 10p
+              </Text>
+            </Image>
            </View>
 
           <View style={styles.container}>
             <Image
             source={{uri:'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2015/3/18/1426693437380/678bc9d4-f65e-4f63-8fe4-ad1186a7976c-2060x1236.jpeg?w=1200&h=630&q=55&auto=format&usm=12&fit=crop&bm=normal&ba=bottom%2Cleft&blend64=aHR0cHM6Ly91cGxvYWRzLmd1aW0uY28udWsvMjAxNi8wNS8yNS9vdmVybGF5LWxvZ28tMTIwMC05MF9vcHQucG5n&s=4d4ffa7814d93b10f86df956456a139c'}}
             style={styles.promotionStyle}
-            />
+            >
+            <Text style={styles.nestedsmallText}>
+              now only 10p
+              </Text>
+              </Image>
            </View>
 
           <View style={styles.container}>
@@ -120,7 +132,7 @@ render(object) {
 renderLoadingView() {
   return(
     <View style={styles.container}>
-    <Text>
+    <Text style={styles.title}>
     Loading App。。。
     </Text>
     </View>
@@ -169,7 +181,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
   },
 
   rightContainer: {
@@ -179,16 +191,20 @@ var styles = StyleSheet.create({
     fontSize: 15,
     marginBottom: 8,
     textAlign: 'left',
-    marginLeft:10
+    marginLeft:10,
+    color:'#727272'
   },
   year: {
     textAlign: 'center',
     fontSize: 10,
+    color:'#727272',
 
   },
   category:{
     textAlign: 'center',
     fontSize: 8,
+    color:'#727272',
+
   },
   thumbnail: {
     width: 81,
@@ -198,7 +214,6 @@ var styles = StyleSheet.create({
   },
   listView: {
     paddingTop: 15,
-    backgroundColor: '#F5FCFF',
     marginLeft:10,
 
   },
@@ -208,9 +223,9 @@ var styles = StyleSheet.create({
     height:200,
   },
   promotionStyle: {
-    width: 400,
-    height: 300,
-    marginTop:100,
+    height: qu_height,
+    marginTop:80,
+    width:width,
 
   },
   card: {
@@ -228,7 +243,26 @@ var styles = StyleSheet.create({
     marginVertical: 10,
     marginLeft:10
   },
-
+  scrollView: {
+    backgroundColor: '#FFFFFF',
+    height: 300,
+  },
+  nestedText: {
+    marginLeft:100,
+    marginTop: 120,
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontWeight:'bold',
+    fontSize:20,
+  },
+  nestedsmallText: {
+    marginLeft:150,
+    marginTop: 130,
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontWeight:'bold',
+    fontSize:15,
+  },
 });
   
 module.exports=FrontPage;

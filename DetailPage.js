@@ -1,6 +1,5 @@
 'use strict';
 
-
 import React, {
   Component,
 } from 'react';
@@ -14,7 +13,7 @@ import {
   Linking
 } from 'react-native';
   
-var IMG_URL='http://129.31.202.148:3000/files/';
+var IMG_URL='http://100.77.188.31:3000/files/';
 
 var OpenURLButton = React.createClass({
 
@@ -36,8 +35,9 @@ var OpenURLButton = React.createClass({
     return (
       <TouchableOpacity
         onPress={this.handleClick}>
-        <View style={styles.button}>
-          <Text style={styles.text}>Open {this.props.url}</Text>
+        <View>
+            <Image source={require('./img/downloadButton.png')} 
+        style={styles.buttonImage}/>
         </View>
       </TouchableOpacity>
     );
@@ -50,44 +50,58 @@ class DetailPage extends Component{
 		var object = this.props.route.passProps.Object;
 
 		return (
-	      <ScrollView contentContainerStyle={styles.contentContainer}>
+	      <ScrollView style={styles.scrollView}>
 	        <View style={styles.mainSection}>
 	          <Image
 	            source={{uri:IMG_URL+object.img_id}}
 	            style={styles.detailsImage}
 	          />
 	          <View style={styles.rightPane}>
-	          	<Text>{object.title}</Text>
-				      <Text>{object.category}</Text>
+	          	<Text style={styles.title}>{object.title}</Text>
+				      <Text style={styles.category}>{object.category}</Text>
 
               <OpenURLButton url={IMG_URL+object.apkid}/>
-
-              <OpenURLButton url={IMG_URL+object.img_id}/>
-
             </View>
 	        </View>
 
 	        <View style={styles.separator} />
-	        <Text>
+	        <Text style={styles.description}>
 	          {object.description}
 	        </Text>
+          <View style={styles.separator} />
+
+
+
+
 	      </ScrollView>
     );
   }
 }
 
 var styles = StyleSheet.create({
-  contentContainer: {
-    padding: 10,
-  },
   rightPane: {
     justifyContent: 'space-between',
     flex: 1,
   },
-  movieTitle: {
+  title: {
     flex: 1,
     fontSize: 16,
+    marginTop:15,
     fontWeight: '500',
+    color:'#727272'
+  },
+  category:{
+    flex: 1,
+    fontSize: 15,
+    marginLeft:20,
+    marginTop:15,
+    color:'#727272',
+
+  },
+  description:{
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#727272',
   },
   rating: {
     marginTop: 10,
@@ -133,9 +147,17 @@ var styles = StyleSheet.create({
   castTitle: {
     fontWeight: '500',
     marginBottom: 3,
+    color:'#727272',
+
   },
   castActor: {
     marginLeft: 2,
+    color:'#727272',
+
+  },
+  scrollView: {
+    backgroundColor: '#FFFFFF',
+    height: 300,
   },
 });
 

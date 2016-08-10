@@ -53,7 +53,7 @@ class FrontNav extends Component{
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#FFFFFF',
   },
   toolbar: {
     backgroundColor: '#a9a9a9',

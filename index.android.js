@@ -25,7 +25,8 @@ var ScrollableTabView = require('react-native-scrollable-tab-view');
 class pay_by_data extends Component {
   render(){
     return (
-      <ScrollableTabView 
+      <ScrollableTabView
+        tabBarBackgroundColor='#FFFFFF'
         tabBarPosition='bottom'
         tabBarUnderlineColor='#009688'
         tabBarActiveTextColor='#009688'

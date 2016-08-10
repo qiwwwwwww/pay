@@ -13,7 +13,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-  var IMG_URL='http://129.31.202.148:3000/files/';
+  var IMG_URL='http://100.77.188.31:3000/files/';
 
 class SearchResults extends Component {
   constructor(props) {
@@ -65,9 +65,11 @@ gotoDetail(rowData){
  
   render() {
     return (
+      <View style={styles.container}>
       <ListView
         dataSource={this.state.dataSource}
         renderRow={this.renderRow.bind(this)}/>
+      </View>
     );
   }
  
@@ -89,9 +91,13 @@ var styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 8,
     textAlign: 'center',
+    color:'#727272',
+
   },
   year: {
     textAlign: 'center',
+    color:'#727272'
+
   },
   thumbnail: {
     width: 81,

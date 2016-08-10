@@ -12,7 +12,7 @@ var {
   ActivityIndicator
 } = ReactNative;
 
-var IP_ADDRESS = 'http://129.31.202.148:3000';  
+var IP_ADDRESS = 'http://100.77.188.31:3000';  
 var REQUEST_URL = IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
 var FILENAME_URL = IP_ADDRESS+'/filename/appstore/';
@@ -117,17 +117,20 @@ var styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 18,
     textAlign: 'center',
-    color: '#656565'
+    color: '#656565',
+    marginTop: 65,
   },
   container: {
-    padding: 30,
-    marginTop: 65,
-    alignItems: 'center'
+    flex:1,
+    padding:20,
+    alignItems: 'center',
+    backgroundColor:'#FFFFFF'
   },
   flowRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
+
   },
   buttonText: {
     fontSize: 18,
@@ -147,15 +150,10 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   searchInput: {
-    height: 36,
-    padding: 4,
-    marginRight: 5,
-    flex: 4,
+    height: 50,
+    flex: 3,
     fontSize: 18,
-    borderWidth: 1,
-    borderColor: '#48BBEC',
-    borderRadius: 8,
-    color: '#48BBEC'
+    color:'#727272'
   },
   image: {
     width: 217,

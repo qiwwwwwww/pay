@@ -9,7 +9,10 @@ import {
   Image,
   ListView,
   ScrollView,
-  Dimensions
+  Dimensions,
+  TextInput,
+  TouchableHighlight,
+  Alert
 } from 'react-native';
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import {TabLayoutAndroid, TabAndroid} from "react-native-android-kit";
@@ -20,7 +23,8 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state={
-      user: null
+      user: null,
+      commet: 'hello',
     }
   }
 
@@ -28,6 +32,27 @@ class Profile extends Component {
     this._setupGoogleSignin();
   }
 
+  _onPressButtonPOST() {
+        fetch("http://100.77.188.31:3000/test3", {
+          method: "POST", 
+          body: JSON.stringify({
+            username: this.state.user.name,
+            email:this.state.user.email, 
+            text: this.state.commet,
+          }),
+          headers:{
+            'Content-Type': 'application/json', 
+          }
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+            Alert.alert(
+                "POST Response",
+                "Response Body -> " + JSON.stringify(responseData.body)
+            )
+        })
+        .done();
+    }
 
   render(){
     if (!this.state.user) {
@@ -67,17 +92,17 @@ class Profile extends Component {
                 icon="user" iconPosition="top">
           <View style={styles.body}>
           <View style={styles.section1}>
-          <Text style={{fontSize: 25, fontWeight: 'bold',marginLeft: 10}}> ABOUT </Text>
+          <Text style={styles.section_name}> ABOUT </Text>
            <View style={styles.separator} />
-          <Text style={{fontSize: 15, fontWeight: 'bold',marginLeft: 10}}> Name</Text>
-          <Text style={{fontSize: 20, margin: 10}}>{this.state.user.name}</Text>
+          <Text style={styles.section_content_one}> Name</Text>
+          <Text style={styles.section_content_two}>{this.state.user.name}</Text>
           <View style={styles.separator} />
-          <Text style={{fontSize: 15, fontWeight: 'bold',marginLeft: 10}}> Email</Text>
-          <Text style={{fontSize: 20, margin: 10}}>{this.state.user.email}</Text>
+          <Text style={styles.section_content_one}> Email</Text>
+          <Text style={styles.section_content_two}>{this.state.user.email}</Text>
           <View style={styles.separator} />
 
           <TouchableOpacity onPress={() => {this._signOut(); }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10}}> Log Out </Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10, color:'#727272'}}> Log Out </Text>
           </TouchableOpacity>
           </View>
           </View>
@@ -87,22 +112,20 @@ class Profile extends Component {
                 icon="heart" iconPosition="top">
             <ScrollView>
             <Text>FloatingButtonAndroid Examples</Text>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-              Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
-              Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.
-            </Text>
+                 <TextInput
+                  style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'#727272'}}
+                  onChangeText={(commet) => this.setState({commet})}
+                  value={this.state.commet}
+                />
+                <TouchableHighlight onPress={this._onPressButtonPOST.bind(this)} style={styles.button}>
+                  <Text>POST</Text>
+                </TouchableHighlight>
             </ScrollView>
           </TabAndroid>
 
           <TabAndroid text="Recent" textSize={16} textColor="white" selectedTextColor="#727272"
                 icon="fen" iconPosition="top">
-            <Text>Hello, I'm the last tab: nothing to show</Text>
+            <Text style={{color:'#727272'}}>Hello, I'm the last tab: nothing to show</Text>
           </TabAndroid>
 
         </TabLayoutAndroid>
@@ -183,6 +206,23 @@ const styles = StyleSheet.create({
     flexDirection:'column',
 
   },
+  section_name:{
+    fontSize: 25, 
+    fontWeight: 'bold',
+    marginLeft: 10, 
+    color:'#727272'
+  },
+  section_content_one:{
+    fontSize: 15, 
+    fontWeight: 'bold',
+    marginLeft: 10,
+    color:'#727272'
+  },
+  section_content_two:{
+    fontSize: 20, 
+    marginLeft: 10,
+    color:'#727272'
+  },
   tabView:{
     flex:0.3,
     alignItems: "stretch",
@@ -200,10 +240,14 @@ separator: {
   height: StyleSheet.hairlineWidth,
   marginVertical: 3,
 },
+button: {
+      backgroundColor: '#eeeeee',
+      padding: 10,
+      marginRight: 5,
+      marginLeft: 5,
+  },
 
 });
-
-
 
 
 module.exports=Profile;

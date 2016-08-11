@@ -10,7 +10,11 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  BackAndroid,
+  ToolbarAndroid,
+  Navigator
+
 } from 'react-native';
 
 
@@ -18,29 +22,66 @@ var OutlineNav = require('./OutlineNav');
 var FrontNav = require('./FrontNav');
 var SearchNav = require('./SearchNav');
 var Profile = require('./Profile');
+var MainScreen = require('./MainScreen');
+
+var _navigator;
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+    _navigator.pop();
+    return true;
+  }
+  return false;
+});
 
 
-var ScrollableTabView = require('react-native-scrollable-tab-view');
 
 class pay_by_data extends Component {
-  render(){
-    return (
-      <ScrollableTabView
-        tabBarBackgroundColor='#FFFFFF'
-        tabBarPosition='bottom'
-        tabBarUnderlineColor='#009688'
-        tabBarActiveTextColor='#009688'
-        tabBarInactiveTextColor='#607D8B'
-            initialPage={0}>
-        <FrontNav tabLabel="Featured" />
-        <OutlineNav tabLabel="Popular" />
-        <SearchNav tabLabel="Search" />
-        <Profile tabLabel="Profile" />
-
-      </ScrollableTabView>
-
-    );
+  constructor(props) {
+    super(props);
+    this.state = { 
+      splashed: false,
+    };
   }
+
+  componentDidMount() {
+    setTimeout(() =>{
+        this.setState({
+          splashed: true,
+        });
+      },2000,);
+  }
+
+  navigatorRenderScene(route, navigator) {
+    _navigator = navigator;
+    if (route.name === 'MainScreen') {
+      return (
+        <View style={styles.container}>
+          <MainScreen navigator={navigator}/>
+        </View>
+      );
+    }
+  }
+
+  render() {
+    if (this.state.splashed) {
+      var initialRoute = {name: 'MainScreen'};
+      return (
+        <Navigator
+          style={styles.container}
+          initialRoute={initialRoute}
+          configureScene={() => Navigator.SceneConfigs.FadeAndroid}
+          renderScene={this.navigatorRenderScene}
+        />
+      );
+    } else {
+      return (
+      <View style={{flex: 1, backgroundColor: '#246dd5', alignItems: 'center', justifyContent: 'center'}}>
+        <Text style={{color: 'white', fontSize: 32,}}>Pay By Data</Text>
+      </View>
+      );
+    }
+  }
+
 }
 
 var styles = StyleSheet.create({

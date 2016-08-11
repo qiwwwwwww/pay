@@ -13,7 +13,7 @@ import {
   Linking
 } from 'react-native';
   
-var IMG_URL='http://100.77.188.31:3000/files/';
+var IMG_URL='http://100.77.188.53:3000/files/';
 
 var OpenURLButton = React.createClass({
 

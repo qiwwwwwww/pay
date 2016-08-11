@@ -29,6 +29,12 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 
 
 class FrontNav extends Component{
+    constructor(props) {
+    super(props);
+    this.state = { 
+      splashed: false,
+    };
+  }
 
   navigatorRenderScene(route, navigator){
     _navigator=navigator;

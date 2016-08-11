@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 
-var IP_ADDRESS = 'http://100.77.188.31:3000';    
+var IP_ADDRESS = 'http://100.77.188.53:3000';    
 var REQUEST_URL =IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
 

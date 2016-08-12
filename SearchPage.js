@@ -39,8 +39,8 @@ class SearchPage extends Component {
     this.setState({ isLoading: false });
     if (filename.length >= 1) {
       this.props.navigator.push({
-      name: 'page2',
-      title: 'results',
+      id: 'SearchResults',
+      title: 'SearchResults',
       passProps:{Filename: filename},
     });
 

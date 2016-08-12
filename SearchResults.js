@@ -29,8 +29,8 @@ gotoDetail(rowData){
   
   this.props.navigator.push(
   {
-    name: 'page3',
-    title: 'detail',
+    id: 'DetailPage',
+    title: 'DetailPage',
     passProps:{Object: rowData},
   }
 

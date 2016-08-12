@@ -15,11 +15,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { EventEmitter } from 'fbemitter';
 
 var navigationHelper = require('./navigation');
-var FrontNav = require('./FrontNav');
 var UsageList = require('./UsageList');
-var OutlineNav = require('./OutlineNav');
-var SearchNav = require('./SearchNav');
+var OutlinePage = require('./OutlinePage');
+var SearchPage = require('./SearchPage');
 var Profile = require('./Profile');
+var FrontPage = require('./FrontPage');
+var DetailPage = require('./DetailPage');
+var SearchResults = require('./SearchResults');
+
 
 let _emitter = new EventEmitter();
 
@@ -49,22 +52,21 @@ class MainScreen extends Component {
                     this._drawer.close()
                 }}/>}
                 tapToClose={true}
-                openDrawerOffset={0.2}
+                openDrawerOffset={0.4}
                 panCloseMask={0.2}
                 closedDrawerOffset={-3}
                 styles={{
-                    drawer: {shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
-                    main: {paddingLeft: 3}
-                }}
+                drawer: {shadowColor: '#009688', shadowOpacity: 0.8, shadowRadius: 0},
+                main: {paddingLeft: 3}}}
                 tweenHandler={(ratio) => ({
                     main: { opacity:(2-ratio)/2 }
                 })}>
                 <Navigator
                     ref={(ref) => this._navigator = ref}
-                    configureScene={(route) => Navigator.SceneConfigs.FloatFromLeft}
+                    configureScene={(route) => Navigator.SceneConfigs.FloatFromRight}
                     initialRoute={{
-                        id: 'FrontNav',
-                        title: 'FrontNav',
+                        id: 'FrontPage',
+                        title: 'FrontPage',
                     }}
                     renderScene={(route, navigator) => this._renderScene(route, navigator)}
                     navigationBar={
@@ -80,17 +82,23 @@ class MainScreen extends Component {
 
     _renderScene(route, navigator) {
         switch (route.id) {
-            case 'FrontNav':
-                return ( <FrontNav navigator={navigator}/> );
+            case 'FrontPage':
+                return ( <FrontPage navigator={navigator} route={route}/> );
 
-            case 'OutlineNav':
-                return ( <OutlineNav navigator={navigator}/> );
+            case 'OutlinePage':
+                return ( <OutlinePage navigator={navigator} route={route}/> );
 
-            case 'SearchNav':
-                return ( <SearchNav navigator={navigator}/> );
+            case 'SearchPage':
+                return ( <SearchPage navigator={navigator} route={route}/> );
                 
             case 'Profile':
-                return ( <Profile navigator={navigator}/> );    
+                return ( <Profile navigator={navigator}/> );
+
+            case 'DetailPage':
+                return ( <DetailPage navigator={navigator} route={route}/> );
+
+            case 'SearchResults':
+                return ( <SearchResults navigator={navigator} route={route}/> );                
         }
     }
 }
@@ -98,9 +106,9 @@ class MainScreen extends Component {
 const NavigationBarRouteMapper = {
     LeftButton(route, navigator, index, navState) {
         switch (route.id) {
-            case 'FrontNav':
-            case 'OutlineNav':
-            case 'SearchNav':
+            case 'FrontPage':
+            case 'OutlinePage':
+            case 'SearchPage':
             case 'Profile':
 
                 return (
@@ -108,7 +116,7 @@ const NavigationBarRouteMapper = {
                         style={styles.navBarLeftButton}
                         onPress={() => {_emitter.emit('openMenu')}}>
                        <Image
-                          source={require('./img/default.png')}
+                          source={require('./img/menu.png')}
                           style={{width: 40, height: 40, marginLeft: 8, marginRight: 8}} />
                     </TouchableOpacity>
                 )
@@ -118,7 +126,7 @@ const NavigationBarRouteMapper = {
                         style={styles.navBarLeftButton}
                         onPress={() => {_emitter.emit('back')}}>
                          <Image
-                            source={require('./img/home.png')}
+                            source={require('./img/return.png')}
                             style={{width: 30, height: 30, marginLeft: 10}} />
 
                     </TouchableOpacity>
@@ -166,15 +174,13 @@ var styles = StyleSheet.create({
     },
     navBarLeftButton: {
         paddingLeft: 10,
+        paddingTop: 5
+
     },
     navBarRightButton: {
         padding: 10,
         paddingTop: 5
     },
-    scene: {
-        flex: 1,
-        paddingTop: 63,
-    }
 });
 
 

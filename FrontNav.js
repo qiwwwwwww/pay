@@ -16,7 +16,7 @@ import {
 var FrontPage = require('./FrontPage');
 var DetailPage = require('./DetailPage');
 
-const routestack = [{name:"page1", title:"front"},{name: "page2", title:"detail"}];
+const routestack = [{name:"page1", title:"front"},{name: "page2", title:"DetailPage"}];
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {

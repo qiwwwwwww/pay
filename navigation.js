@@ -2,21 +2,25 @@ import React from 'react-native';
 
 module.exports = function (scene) {
     var componentMap = {
-        'FrontNav': {
-            title: 'FrontNav',
-            id: 'FrontNav'
+        'FrontPage': {
+            title: 'FrontPage',
+            id: 'FrontPage'
         },
-        'OutlineNav': {
-            title: 'OutlineNav',
-            id: 'OutlineNav'
+        'OutlinePage': {
+            title: 'OutlinePage',
+            id: 'OutlinePage'
         },
-        'SearchNav': {
-            title: 'SearchNav',
-            id: 'SearchNav'
+        'SearchPage': {
+            title: 'SearchPage',
+            id: 'SearchPage'
         },
         'Profile': {
             title: 'Profile',
             id: 'Profile'
+        },
+        'DetailPage': {
+            title: 'DetailPage',
+            id: 'DetailPage'
         },
     }
 

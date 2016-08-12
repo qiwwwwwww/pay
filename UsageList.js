@@ -29,14 +29,14 @@ class UsageList extends Component {
 
   componentDidMount() {
         this.setState({
-            dataSource: this.state.dataSource.cloneWithRows(['FrontNav', 'OutlineNav', 'SearchNav', 'Profile'])
+            dataSource: this.state.dataSource.cloneWithRows(['FrontPage', 'OutlinePage', 'SearchPage', 'Profile'])
         });
     }
 
   _renderMenuItem(item) {
         return(
             <TouchableHighlight style={styles.menuContainer} onPress={()=> this._onItemSelect(item)}>
-            <Text style={{color:'#000000'}}>{item}</Text>
+            <Text style={{color:'#009688'}}>{item}</Text>
             </TouchableHighlight>
         );
     }

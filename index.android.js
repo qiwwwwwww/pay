@@ -75,7 +75,7 @@ class pay_by_data extends Component {
       );
     } else {
       return (
-      <View style={{flex: 1, backgroundColor: '#246dd5', alignItems: 'center', justifyContent: 'center'}}>
+      <View style={{flex: 1, backgroundColor: '#009688', alignItems: 'center', justifyContent: 'center'}}>
         <Text style={{color: 'white', fontSize: 32,}}>Pay By Data</Text>
       </View>
       );

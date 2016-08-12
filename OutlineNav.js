@@ -16,7 +16,7 @@ import {
 var OutlinePage = require('./OutlinePage');
 var DetailPage = require('./DetailPage');
 
-const routestack = [{name:"page1", title:"outline"},{name: "page2", title:"detail"}];
+const routestack = [{id:"OutlinePage", title:"OutlinePage"},{id: "DetailPage", title:"DetailPage"}];
 
 var _navigator;
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -33,9 +33,9 @@ class OutlineNav extends Component{
   navigatorRenderScene(route, navigator){
     _navigator=navigator;
     switch(route.name){
-      case 'page1':
+      case 'OutlinePage':
         return (<OutlinePage navigator={navigator}  route={route}/>);
-      case 'page2':
+      case 'DetailPage':
         return (<DetailPage navigator={navigator} route={route}/>);    
     }
   }

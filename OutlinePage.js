@@ -85,8 +85,8 @@ gotoDetail(object){
 	
 	this.props.navigator.push(
 	{
-		name: 'page2',
-		title: 'detail',
+		id: 'DetailPage',
+		title: 'DetailPage',
 		passProps:{Object: object},
 	}
 

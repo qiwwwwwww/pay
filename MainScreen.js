@@ -56,10 +56,16 @@ class MainScreen extends Component {
                 panCloseMask={0.2}
                 closedDrawerOffset={-3}
                 styles={{
-                drawer: {shadowColor: '#009688', shadowOpacity: 0.8, shadowRadius: 0},
+                drawer: {backgroundColor: '#FFFFFF', shadowColor: '#0000', shadowOpacity: 0.8, shadowRadius: 0},
                 main: {paddingLeft: 3}}}
                 tweenHandler={(ratio) => ({
-                    main: { opacity:(2-ratio)/2 }
+                main: {
+                opacity: 1,
+                },
+                mainOverlay: {
+                opacity: ratio / 2,
+                backgroundColor: '#000000',
+                },                
                 })}>
                 <Navigator
                     ref={(ref) => this._navigator = ref}

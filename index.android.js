@@ -48,7 +48,7 @@ class pay_by_data extends Component {
         this.setState({
           splashed: true,
         });
-      },2000,);
+      },10,);
   }
 
   navigatorRenderScene(route, navigator) {

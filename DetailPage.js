@@ -13,7 +13,7 @@ import {
   Linking
 } from 'react-native';
   
-var IMG_URL='http://100.77.188.53:3000/files/';
+var IMG_URL='http://100.77.188.61:3000/files/';
 
 var OpenURLButton = React.createClass({
 
@@ -47,9 +47,10 @@ var OpenURLButton = React.createClass({
 class DetailPage extends Component{
 
 	render(){
-		var object = this.props.route.passProps.Object;
-
-		return (
+    var second = this.props.route.passProps;
+    var object = this.props.route.passProps.Object;
+    console.log(second);
+    return (
 	      <ScrollView style={styles.scrollView}>
 	        <View style={styles.mainSection}>
 	          <Image

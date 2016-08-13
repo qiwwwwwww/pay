@@ -22,6 +22,10 @@ module.exports = function (scene) {
             title: 'DetailPage',
             id: 'DetailPage'
         },
+        'UsageList': {
+            title: 'UsageList',
+            id: 'UsageList'
+        },
     }
 
     return componentMap[scene];

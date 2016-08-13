@@ -8,186 +8,217 @@ import{
   Image,
   Navigator,
   TouchableOpacity,
+  DrawerLayoutAndroid,
+  TouchableHighlight,
+  BackAndroid,
+
 } from 'react-native';
 
-import Drawer from 'react-native-drawer';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { EventEmitter } from 'fbemitter';
-
-var navigationHelper = require('./navigation');
-var UsageList = require('./UsageList');
 var OutlinePage = require('./OutlinePage');
 var SearchPage = require('./SearchPage');
 var Profile = require('./Profile');
 var FrontPage = require('./FrontPage');
 var DetailPage = require('./DetailPage');
 var SearchResults = require('./SearchResults');
+import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
-
-let _emitter = new EventEmitter();
-
-
-class MainScreen extends Component {
-
-  componentDidMount() {
-        var self = this;
-
-        _emitter.addListener('openMenu', () => {
-            self._drawer.open();
-        });
-
-        _emitter.addListener('back', () => {
-            self._navigator.pop();
-        });
+var _navigator; //用来保存navigator
+BackAndroid.addEventListener('hardwareBackPress', () => {
+    if (_navigator.getCurrentRoutes().length === 1) {
+        return false;
     }
+    _navigator.pop();
+    return true;
+});
 
-
-  	render() {
-      return (
-        <Drawer
-                ref={(ref) => this._drawer = ref}
-                type="overlay"
-                content={<UsageList navigate={(route) => {
-                    this._navigator.push(navigationHelper(route));
-                    this._drawer.close()
-                }}/>}
-                tapToClose={true}
-                openDrawerOffset={0.4}
-                panCloseMask={0.2}
-                closedDrawerOffset={-3}
-                styles={{
-                drawer: {backgroundColor: '#FFFFFF', shadowColor: '#0000', shadowOpacity: 0.8, shadowRadius: 0},
-                main: {paddingLeft: 3}}}
-                tweenHandler={(ratio) => ({
-                main: {
-                opacity: 1,
-                },
-                mainOverlay: {
-                opacity: ratio / 2,
-                backgroundColor: '#000000',
-                },                
-                })}>
-                <Navigator
-                    ref={(ref) => this._navigator = ref}
-                    configureScene={(route) => Navigator.SceneConfigs.FloatFromRight}
-                    initialRoute={{
-                        id: 'FrontPage',
-                        title: 'FrontPage',
-                    }}
-                    renderScene={(route, navigator) => this._renderScene(route, navigator)}
-                    navigationBar={
-                        <Navigator.NavigationBar
-                            style={styles.navBar}
-                            routeMapper={NavigationBarRouteMapper} />
-                    }
-                />
-        </Drawer>
-
-    );
+var Part;
+class MainScreen extends Component{
+  constructor(props) {
+    super(props);
+    this.state={
+      user: null,
+      commet: 'hello',
+    }
   }
 
-    _renderScene(route, navigator) {
-        switch (route.id) {
-            case 'FrontPage':
-                return ( <FrontPage navigator={navigator} route={route}/> );
+  componentDidMount(){
+    this._setupGoogleSignin();
+  }
 
-            case 'OutlinePage':
-                return ( <OutlinePage navigator={navigator} route={route}/> );
 
-            case 'SearchPage':
-                return ( <SearchPage navigator={navigator} route={route}/> );
-                
-            case 'Profile':
-                return ( <Profile navigator={navigator}/> );
 
-            case 'DetailPage':
-                return ( <DetailPage navigator={navigator} route={route}/> );
+  configureScene(route, routeStack) {
+      return Navigator.SceneConfigs.FloatFromRight;
+  }
+  
 
-            case 'SearchResults':
-                return ( <SearchResults navigator={navigator} route={route}/> );                
-        }
-    }
-}
+  renderScene(router, navigator) {
+      Part = null;
+      _navigator = navigator;
 
-const NavigationBarRouteMapper = {
-    LeftButton(route, navigator, index, navState) {
-        switch (route.id) {
-            case 'FrontPage':
-            case 'OutlinePage':
-            case 'SearchPage':
-            case 'Profile':
+      switch (router.id) {
+          case 'OutlinePage':
+              Part = OutlinePage;
+              break;
+          case 'SearchPage':
+              Part = SearchPage;
+              break;
+          case 'DetailPage':
+              Part = DetailPage;
+              break;    
+          case 'FrontPage':
+              Part = FrontPage;
+              break;
+          case 'SearchResults':
+              Part = SearchResults;
+              break;    
+          case 'Profile':
+              Part = Profile;
+              break;
+      }
 
-                return (
-                    <TouchableOpacity
-                        style={styles.navBarLeftButton}
-                        onPress={() => {_emitter.emit('openMenu')}}>
-                       <Image
-                          source={require('./img/menu.png')}
-                          style={{width: 40, height: 40, marginLeft: 8, marginRight: 8}} />
-                    </TouchableOpacity>
-                )
-            default:
-                return (
-                    <TouchableOpacity
-                        style={styles.navBarLeftButton}
-                        onPress={() => {_emitter.emit('back')}}>
-                         <Image
-                            source={require('./img/return.png')}
-                            style={{width: 30, height: 30, marginLeft: 10}} />
+      //注意这里将navigator作为属性props传递给了各个场景组件
+      return <Part navigator = {navigator} route={router} />;
+      }
 
-                    </TouchableOpacity>
-                )
-        }
-    },
- RightButton(route, navigator, index, navState) {
-        return (
-            <TouchableOpacity
-                style={styles.navBarRightButton}>
-                <Image
-                            source={require('./img/menu.png')}
-                            style={{width: 30, height: 30, marginLeft: 10}} />
-            </TouchableOpacity>
-        )
-    },
+  onNavPress(target) {
+        _navigator.push({
+            id: target,
+            passProps:{user: this.state.user},
 
-    Title(route, navigator, index, navState) {
-        return (
-            <Text style={[styles.navBarText, styles.navBarTitleText]}>
-                {route.title}
-            </Text>
-        )
+        });
+        this.refs['DRAWER'].closeDrawer();
+    
     }
 
+      render() {
+        if (!this.state.user) {
+          var navigationView = (
+            <View style={{flex: 1, backgroundColor: '#fff'}}>
+              <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
+              <GoogleSigninButton style={{width: 312, height: 48, marginTop:300}} color={GoogleSigninButton.Color.Light} size={GoogleSigninButton.Size.Wide} onPress={() => { this._signIn(); }}/>
+              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>跳转到 [消息]</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>跳转到 [发现]</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>跳转到 [我的]</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>跳转到 [我的]</Text>
+
+            </View>
+          );
+
+          return (
+            <DrawerLayoutAndroid
+            ref={'DRAWER'}
+            drawerWidth = {200}
+            drawerPosition={DrawerLayoutAndroid.positions.Left}
+            renderNavigationView={() => navigationView}>
+              <Navigator
+                  initialRoute ={{id: 'FrontPage'}}
+                  configureScene = {this.configureScene}
+                  renderScene = {this.renderScene}>
+              </Navigator>
+            </DrawerLayoutAndroid>
+
+          );
+
+        }
+        var self_photo;
+        if (this.state.user.photo !== null)
+          {
+            self_photo=
+              <Image source={{uri: this.state.user.photo}}
+                style={styles.thumbnail}/>;
+
+          } else{
+            self_photo=<Image source={require('./img/default.jpg')} 
+                style={styles.thumbnail}/> ;
+
+          }
+        if (this.state.user) {
+
+          var navigationView = (
+            <View style={{flex: 1, backgroundColor: '#fff'}}>
+              <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
+              <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>{this.state.user.name}</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>跳转到 [消息]</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>跳转到 [发现]</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>跳转到 [我的]</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>跳转到 [我的]</Text>
+
+            </View>
+          );
+
+         
+          return (
+          <DrawerLayoutAndroid
+            ref={'DRAWER'}
+            drawerWidth = {200}
+            drawerPosition={DrawerLayoutAndroid.positions.Left}
+            renderNavigationView={() => navigationView}>
+              <Navigator
+                  initialRoute ={{id: 'Home'}}
+                  configureScene = {this.configureScene}
+                  renderScene = {this.renderScene}>
+              </Navigator>
+            </DrawerLayoutAndroid>
+
+          );
+      }
+  }
+  async _setupGoogleSignin() {
+    try {
+      await GoogleSignin.hasPlayServices({ autoResolve: true });
+      await GoogleSignin.configure({
+        scopes: ['https://www.googleapis.com/auth/userinfo.profile'],
+        webClientId: '180845818599-aob33qcolnb66ec3e2afkjsl8drgu4sf.apps.googleusercontent.com',
+        offlineAccess: true
+      });
+
+      const user = await GoogleSignin.currentUserAsync();
+      console.log(user);
+      this.setState({user});
+    }
+    catch(err) {
+      console.log("Play services error", err.code, err.message);
+    }
+  }
+
+  _signIn() {
+    GoogleSignin.signIn()
+    .then((user) => {
+      console.log(user);
+      this.setState({user: user});
+    })
+    .catch((err) => {
+      console.log('WRONG SIGNIN', err);
+    })
+    .done();
+  }
+
+  _signOut() {
+    GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
+      this.setState({user: null});
+    })
+    .done();
+  }
 
 }
+
+
 
 var styles = StyleSheet.create({
-   container: {
-        flex: 1,
-        justifyContent: 'center'
+    container: {
+        backgroundColor: '#FFF',
+        flex: 1, //flex-grow:1 等分剩余空间
+        justifyContent: 'center', //定义了项目在主轴上的对齐方式
+        alignItems: 'center', //定义项目在交叉轴上如何对齐
     },
-    navBar: {
-        backgroundColor: '#BD5026',
-    },
-    navBarText: {
-        color: 'white',
-        fontSize: 16,
-        marginVertical: 10,
-    },
-    navBarTitleText: {
-        fontWeight: '500',
-        marginVertical: 9,
-    },
-    navBarLeftButton: {
-        paddingLeft: 10,
-        paddingTop: 5
-
-    },
-    navBarRightButton: {
-        padding: 10,
-        paddingTop: 5
-    },
+    button: {
+        borderRadius: 5,
+        marginTop: 20,
+        color:'#000000',
+    }
 });
 
 
 module.exports = MainScreen;
+

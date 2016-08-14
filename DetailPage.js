@@ -45,6 +45,18 @@ var OpenURLButton = React.createClass({
 });
 
 class DetailPage extends Component{
+    
+
+  goComment(user){
+    this.props.navigator.push({
+
+    id:'Review',
+    title:'Review',
+        passProps:{
+          User:user,
+        }
+  });
+}
 
 	render(){
     var object = this.props.route.passProps.Object;
@@ -72,7 +84,8 @@ class DetailPage extends Component{
           <View style={styles.separator} />
 
         <Text style={styles.description}>{user.name}</Text>
-
+        <Text style={styles.title} onPress={() => this.goComment(user)}>Write a Review</Text>
+        
 	      </ScrollView>
     );
   }

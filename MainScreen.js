@@ -20,6 +20,8 @@ var Profile = require('./Profile');
 var FrontPage = require('./FrontPage');
 var DetailPage = require('./DetailPage');
 var SearchResults = require('./SearchResults');
+var Review = require('./Review');
+
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
 var _navigator; //用来保存navigator
@@ -78,6 +80,9 @@ class MainScreen extends Component{
           case 'Profile':
               Part = Profile;
               break;
+          case 'Review':
+              Part = Review;
+              break;    
       }
 
       //注意这里将navigator作为属性props传递给了各个场景组件

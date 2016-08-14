@@ -55,11 +55,7 @@ render() {
 
   return(
     <ScrollView>
-    <View style={styles.toolbar}>
-        <Text style={styles.toolbarButton}>Categories</Text>
-        <Text style={styles.toolbarTitle}>Popular</Text>
-        <Text style={styles.toolbarButton}>Loves</Text>
-    </View>
+
     <ListView
     dataSource={this.state.dataSource}
     renderRow={this.renderObjects.bind(this)}

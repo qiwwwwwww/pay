@@ -10,11 +10,12 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Linking
+  Linking,
+  ListView
 } from 'react-native';
   
 var IMG_URL='http://100.77.188.66:3000/files/';
-
+var REQUEST_URL='http://100.77.188.66:3000/test5';
 var OpenURLButton = React.createClass({
 
   propTypes: {
@@ -45,7 +46,32 @@ var OpenURLButton = React.createClass({
 });
 
 class DetailPage extends Component{
-    
+   constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: new ListView.DataSource({
+         rowHasChanged: (row1, row2) => row1 !== row2,
+      }),
+       loaded: false, 
+  };
+}
+
+componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData(){
+    fetch(REQUEST_URL)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(responseData.objects),
+          loaded: true,
+        });
+      })
+      .done();
+      
+  } 
 
   goComment(user){
     this.props.navigator.push({
@@ -61,6 +87,9 @@ class DetailPage extends Component{
 	render(){
     var object = this.props.route.passProps.Object;
     var user = this.props.route.passProps.User;
+    if(!this.state.loaded) {
+        return this.renderLoadingView();
+      }
 
     return (
 	      <ScrollView style={styles.scrollView}>
@@ -85,10 +114,37 @@ class DetailPage extends Component{
 
         <Text style={styles.description}>{user.name}</Text>
         <Text style={styles.title} onPress={() => this.goComment(user)}>Write a Review</Text>
-        
+        <View style={styles.separator} />
+
+        <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderObjects.bind(this)}
+            style={styles.listView}
+            />
 	      </ScrollView>
     );
   }
+
+  renderLoadingView() {
+  return(
+    <View style={styles.container}>
+    <Text style={styles.title}>
+    Loading comment。。。
+    </Text>
+    </View>
+    );
+}
+
+renderObjects(object){
+
+  return(
+
+    <Text style={styles.description}>{object.comment}</Text>
+
+        
+    );
+  }
+
 }
 
 var styles = StyleSheet.create({
@@ -172,6 +228,10 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     height: 300,
     marginTop:60,
+  },
+  listView: {
+    paddingTop: 20,
+    backgroundColor: '#F5FCFF',
   },
 });
 

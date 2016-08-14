@@ -186,7 +186,7 @@ class MainScreen extends Component{
                                 return (
                                     <TouchableOpacity
                                       style={styles.navBarLeftButton}
-                                      onPress={() => {_emitter.emit('back')}}>
+                                      onPress={() => {_navigator.pop()}}>
                                       <Image
                                          source={require('./img/return.png')}
                                          style={{width: 30, height: 30, marginLeft: 10}} />

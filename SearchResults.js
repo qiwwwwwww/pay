@@ -26,17 +26,38 @@ class SearchResults extends Component {
   }
  
 gotoDetail(rowData){
-  
+  var user=this.props.route.passProps.User;
+
+if (user!==null) {
   this.props.navigator.push(
   {
     id: 'DetailPage',
     title: 'DetailPage',
-    passProps:{Object: rowData},
+    passProps:{
+      Object: rowData,
+      User: user,
+    },
   }
 
   );
 
+}else{
+  this.props.navigator.push({
+    id:'DetailPage',
+    title: 'DetailPage',
+    passProps:{
+      Object: object,
+        User: {
+          'name':'guest'
+        },
+      }
+
+    },
+
+  );
 }
+}
+
 
   renderRow(rowData, sectionID, rowID) {
     return (

@@ -47,9 +47,9 @@ var OpenURLButton = React.createClass({
 class DetailPage extends Component{
 
 	render(){
-    var second = this.props.route.passProps;
     var object = this.props.route.passProps.Object;
-    console.log(second);
+    var user = this.props.route.passProps.User;
+
     return (
 	      <ScrollView style={styles.scrollView}>
 	        <View style={styles.mainSection}>
@@ -71,8 +71,7 @@ class DetailPage extends Component{
 	        </Text>
           <View style={styles.separator} />
 
-
-
+        <Text style={styles.description}>{user.name}</Text>
 
 	      </ScrollView>
     );
@@ -159,6 +158,7 @@ var styles = StyleSheet.create({
   scrollView: {
     backgroundColor: '#FFFFFF',
     height: 300,
+    marginTop:60,
   },
 });
 

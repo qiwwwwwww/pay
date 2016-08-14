@@ -30,6 +30,7 @@ class FrontPage extends Component {
          rowHasChanged: (row1, row2) => row1 !== row2,
       }),
        loaded: false, 
+
   };
 }
 
@@ -140,19 +141,44 @@ renderLoadingView() {
 }
 
 gotoDetail(object){
-	
+var user=this.props.route.passProps.user;
+
+if (user!==null) {
 	this.props.navigator.push(
 	{
     id:'DetailPage',
 		title: 'DetailPage',
-		passProps:{Object: object},
-	}
+		passProps:{
+      Object: object,
+        User: user,
+      }
+
+    },
 
 	);
 
+}else{
+  this.props.navigator.push(
+  {
+    id:'DetailPage',
+    title: 'DetailPage',
+    passProps:{
+      Object: object,
+        User: {
+          'name':'guest'
+        },
+      }
+
+    },
+
+  );
+
+
+}
+
+
 }
 renderObjects(object){
-
   return(
 
         <TouchableHighlight 

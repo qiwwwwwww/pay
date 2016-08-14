@@ -83,18 +83,40 @@ renderLoadingView() {
 }
 
 gotoDetail(object){
-	
-	this.props.navigator.push(
-	{
-		id: 'DetailPage',
-		title: 'DetailPage',
-		passProps:{
-      Object: object,
-      User: this.props.route.passProps.user,
-    },
-	}
+	var user=this.props.route.passProps.user;
 
-	);
+if (user!==null) {
+  this.props.navigator.push(
+  {
+    id:'DetailPage',
+    title: 'DetailPage',
+    passProps:{
+      Object: object,
+        User: user,
+      }
+
+    },
+
+  );
+
+}else{
+  this.props.navigator.push(
+  {
+    id:'DetailPage',
+    title: 'DetailPage',
+    passProps:{
+      Object: object,
+        User: {
+          'name':'guest'
+        },
+      }
+
+    },
+
+  );
+
+
+}
 
 }
 

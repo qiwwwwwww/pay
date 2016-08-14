@@ -38,12 +38,28 @@ class SearchPage extends Component {
   _handleResponse(filename) {
     this.setState({ isLoading: false });
     if (filename.length >= 1) {
+    var user=this.props.route.passProps.user;
+    if (user!==null) {
       this.props.navigator.push({
       id: 'SearchResults',
       title: 'SearchResults',
-      passProps:{Filename: filename},
+      passProps:{
+        Filename: filename,
+        User: user,
+        },
     });
-
+    }else{
+      this.props.navigator.push({
+      id: 'SearchResults',
+      title: 'SearchResults',
+      passProps:{
+        Filename: filename,
+        User: {
+          'name':'guest',
+        },
+        },
+      });
+    }
     } else {
       this.setState({ message: 'App name not recognized; please try again.'});
     }

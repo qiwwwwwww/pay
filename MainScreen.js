@@ -36,7 +36,7 @@ class MainScreen extends Component{
   constructor(props) {
     super(props);
     this.state={
-      user: null,
+      user:null,
       commet: 'hello',
     }
   }
@@ -97,27 +97,78 @@ class MainScreen extends Component{
       render() {
         if (!this.state.user) {
           var navigationView = (
-            <View style={{flex: 1, backgroundColor: '#fff'}}>
+            <View style={{flex: 1, backgroundColor: '#607D8B'}}>
               <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
-              <GoogleSigninButton style={{width: 312, height: 48, marginTop:300}} color={GoogleSigninButton.Color.Light} size={GoogleSigninButton.Size.Wide} onPress={() => { this._signIn(); }}/>
+              <GoogleSigninButton style={{width: 230, height: 48, marginTop:300}} color={GoogleSigninButton.Color.Light} size={GoogleSigninButton.Size.Wide} onPress={() => { this._signIn(); }}/>
               <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>OutlinePage</Text>
               <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>FrontPage</Text>
               <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>SearchPage</Text>
               <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>Profile</Text>
-
             </View>
           );
-
-          return (
-            <DrawerLayoutAndroid
+      return (
+          <DrawerLayoutAndroid
             ref={'DRAWER'}
             drawerWidth = {200}
             drawerPosition={DrawerLayoutAndroid.positions.Left}
             renderNavigationView={() => navigationView}>
-              <Navigator
-                  initialRoute ={{id: 'FrontPage'}}
-                  configureScene = {this.configureScene}
-                  renderScene = {this.renderScene}>
+            <Navigator
+                initialRoute ={{id: 'FrontPage'}}
+                configureScene = {this.configureScene}
+                renderScene = {this.renderScene}
+                navigationBar={
+                <Navigator.NavigationBar
+                    style={styles.navBar}
+                    routeMapper={{
+                      LeftButton:(route, navigator, index, navState) => {
+                            switch(route.id){
+                              case 'FrontPage':
+                              case 'OutlinePage':
+                              case 'SearchPage':
+                              case 'Profile':
+                                return(
+                                    <TouchableOpacity
+                                        style={styles.navBarLeftButton}
+                                        onPress={() => this.refs['DRAWER'].openDrawer()}>
+                                        <Image
+                                            source={require('./img/menu.png')}
+                                            style={{width: 40, height: 40, marginLeft: 8, marginRight: 8}} />
+                                    </TouchableOpacity>
+                                         );
+                              default:
+                                return (
+                                    <TouchableOpacity
+                                      style={styles.navBarLeftButton}
+                                      onPress={() => {_navigator.pop()}}>
+                                      <Image
+                                         source={require('./img/return.png')}
+                                         style={{width: 30, height: 30, marginLeft: 10}} />
+                                    </TouchableOpacity>
+                                      );
+                                    }
+                                  },
+                      RightButton:(route, navigator, index, navState)=> {
+                                return (
+                                     <TouchableOpacity
+                                         style={styles.navBarRightButton}>
+                                         <Image
+                                            source={require('./img/menu.png')}
+                                            style={{width: 30, height: 30, marginLeft: 10}} />
+                                      </TouchableOpacity>
+                                      ); 
+                                    },
+ 
+                      Title:(route, navigator, index, navState)=> {
+                                return (
+                                 <Text style={[styles.navBarText, styles.navBarTitleText]}>
+                                    {route.id}
+                                 </Text>
+                             );
+                          },
+                      }}
+                    />
+                  }
+                  >
               </Navigator>
             </DrawerLayoutAndroid>
 
@@ -142,7 +193,7 @@ class MainScreen extends Component{
             <View style={{flex: 1, backgroundColor: '#607D8B'}}>
               <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
               <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>{this.state.user.name}</Text>
-              <Text style={styles.button} onPress={() => this.signOut()}>Log Out</Text>
+              <Text style={styles.button} onPress={() => {this._signOut();}}> Log Out</Text>
               <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>My Profile</Text>
               <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>OutlinePage</Text>
               <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>FrontPage</Text>
@@ -160,7 +211,7 @@ class MainScreen extends Component{
             drawerPosition={DrawerLayoutAndroid.positions.Left}
             renderNavigationView={() => navigationView}>
               <Navigator
-                  initialRoute ={{id: 'Home'}}
+                  initialRoute ={{id: 'FrontPage'}}
                   configureScene = {this.configureScene}
                   renderScene = {this.renderScene}
                   navigationBar={
@@ -234,6 +285,12 @@ class MainScreen extends Component{
       const user = await GoogleSignin.currentUserAsync();
       console.log(user);
       this.setState({user});
+       _navigator.push({
+            id: 'FrontPage',
+            passProps:{user: this.state.user},
+
+        });
+
     }
     catch(err) {
       console.log("Play services error", err.code, err.message);
@@ -245,6 +302,12 @@ class MainScreen extends Component{
     .then((user) => {
       console.log(user);
       this.setState({user: user});
+       _navigator.push({
+            id: 'FrontPage',
+            passProps:{user: this.state.user},
+
+        }); 
+
     })
     .catch((err) => {
       console.log('WRONG SIGNIN', err);

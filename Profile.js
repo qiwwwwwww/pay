@@ -20,12 +20,72 @@ import {TabLayoutAndroid, TabAndroid} from "react-native-android-kit";
 var width = Dimensions.get('window').width; //full width
 
 class Profile extends Component {
-  
+    
+
+
 
   render(){
+      var User=this.props.route.passProps.user;
+      var self_photo;
+      if (User.photo !== null)
+      {
+          self_photo=
+              <Image source={{uri: User.photo}}
+                style={styles.thumbnail}/>;
+      } else{
+          self_photo=<Image source={require('./img/default.jpg')} 
+                      style={styles.thumbnail}/> ;
 
+      }
       return (
-          <Text style={{backgroundColor:'black'}}>如今编程成为了一个越来越重要的「技能」：作为设计师，懂一些编程可能会帮你更好地理解自己的工作内容；作为创业者，技术创始人的身份则会让你的很多工作显得更容易。而作为刚想入门的新手，面对眼前海量的信息，或许根本不知道从哪里开始；入门轻松度过初级材料的学习后，发现学习越来越困难，陡峭的学习曲线又让你望而却步；你知道如何在页面上打印输出一些文本行，但是你不知道何时该进行一个真正的有用的项目；你不清楚自己还有哪些不知道的东西，你甚至搞不清下一步该学什么。</Text>
+         <View style={styles.container}>
+        
+        <View style={styles.header} >
+        {self_photo}
+        <Text style={styles.name}>{User.name}</Text>
+        </View>
+        
+        <View style={styles.tabView}>
+        <TabLayoutAndroid style={{height:60}} backgroundColor="#009688" indicatorTabColor="#727272"
+          indicatorTabHeight={2} scrollable={false} center={false}>
+
+          <TabAndroid text="user" textSize={16} textColor="white" selectedTextColor="#727272"
+                icon="user" iconPosition="top">
+          <View style={styles.body}>
+          <View style={styles.section1}>
+          <Text style={styles.section_name}> ABOUT </Text>
+           <View style={styles.separator} />
+          <Text style={styles.section_content_one}> Name</Text>
+          <Text style={styles.section_content_two}>{User.name}</Text>
+          <View style={styles.separator} />
+          <Text style={styles.section_content_one}> Email</Text>
+          <Text style={styles.section_content_two}>{User.email}</Text>
+          <View style={styles.separator} />
+
+          <TouchableOpacity onPress={() => {this._signOut(); }}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10, color:'#727272'}}> Log Out </Text>
+          </TouchableOpacity>
+          </View>
+          </View>
+          </TabAndroid>
+
+          <TabAndroid text="Favorite" textSize={16} textColor="white" selectedTextColor="#727272"
+                icon="heart" iconPosition="top">
+            <ScrollView>
+            <Text>FloatingButtonAndroid Examples</Text>
+
+            </ScrollView>
+          </TabAndroid>
+
+          <TabAndroid text="Recent" textSize={16} textColor="white" selectedTextColor="#727272"
+                icon="fen" iconPosition="top">
+            <Text style={{color:'#727272'}}>Hello, I'm the last tab: nothing to show</Text>
+          </TabAndroid>
+
+        </TabLayoutAndroid>
+        </View>
+
+        </View>
 
       );
     }
@@ -49,9 +109,9 @@ const styles = StyleSheet.create({
     borderWidth:2,
     borderColor:'#607D8B',
     borderRadius: 100,
-    width: 150,
-    height: 150,
-    marginTop: 30,
+    width: 120,
+    height: 120,
+    marginTop: 70,
   },
   name: {
     fontSize: 25, 

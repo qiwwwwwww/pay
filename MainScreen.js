@@ -46,6 +46,9 @@ class MainScreen extends Component{
   }
 
 
+  openDrawer() {
+    this.refs['DRAWER'].openDrawer()
+  }
 
   configureScene(route, routeStack) {
       return Navigator.SceneConfigs.FloatFromRight;
@@ -97,10 +100,10 @@ class MainScreen extends Component{
             <View style={{flex: 1, backgroundColor: '#fff'}}>
               <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
               <GoogleSigninButton style={{width: 312, height: 48, marginTop:300}} color={GoogleSigninButton.Color.Light} size={GoogleSigninButton.Size.Wide} onPress={() => { this._signIn(); }}/>
-              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>跳转到 [消息]</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>跳转到 [发现]</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>跳转到 [我的]</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>跳转到 [我的]</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>OutlinePage</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>FrontPage</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>SearchPage</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>Profile</Text>
 
             </View>
           );
@@ -136,13 +139,14 @@ class MainScreen extends Component{
         if (this.state.user) {
 
           var navigationView = (
-            <View style={{flex: 1, backgroundColor: '#fff'}}>
+            <View style={{flex: 1, backgroundColor: '#607D8B'}}>
               <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
               <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>{this.state.user.name}</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>跳转到 [消息]</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>跳转到 [发现]</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>跳转到 [我的]</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>跳转到 [我的]</Text>
+              <Text style={styles.button} onPress={() => this.signOut()}>Log Out</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>My Profile</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>OutlinePage</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>FrontPage</Text>
+              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>SearchPage</Text>
 
             </View>
           );
@@ -152,12 +156,66 @@ class MainScreen extends Component{
           <DrawerLayoutAndroid
             ref={'DRAWER'}
             drawerWidth = {200}
+            drawerBackgroundColor="#607D8B"
             drawerPosition={DrawerLayoutAndroid.positions.Left}
             renderNavigationView={() => navigationView}>
               <Navigator
                   initialRoute ={{id: 'Home'}}
                   configureScene = {this.configureScene}
-                  renderScene = {this.renderScene}>
+                  renderScene = {this.renderScene}
+                  navigationBar={
+                    <Navigator.NavigationBar
+                      style={styles.navBar}
+                      routeMapper={{
+                         LeftButton:(route, navigator, index, navState) => {
+                            switch(route.id){
+                              case 'FrontPage':
+                              case 'OutlinePage':
+                              case 'SearchPage':
+                              case 'Profile':
+                                return(
+                                    <TouchableOpacity
+                                        style={styles.navBarLeftButton}
+                                        onPress={() => this.refs['DRAWER'].openDrawer()}>
+                                        <Image
+                                            source={require('./img/menu.png')}
+                                            style={{width: 40, height: 40, marginLeft: 8, marginRight: 8}} />
+                                    </TouchableOpacity>
+                                         );
+                              default:
+                                return (
+                                    <TouchableOpacity
+                                      style={styles.navBarLeftButton}
+                                      onPress={() => {_emitter.emit('back')}}>
+                                      <Image
+                                         source={require('./img/return.png')}
+                                         style={{width: 30, height: 30, marginLeft: 10}} />
+                                    </TouchableOpacity>
+                                      );
+                                    }
+                                  },
+                        RightButton:(route, navigator, index, navState)=> {
+                              return (
+                                     <TouchableOpacity
+                                         style={styles.navBarRightButton}>
+                                         <Image
+                                            source={require('./img/menu.png')}
+                                            style={{width: 30, height: 30, marginLeft: 10}} />
+                                      </TouchableOpacity>
+                                      ); 
+                                    },
+ 
+                         Title:(route, navigator, index, navState)=> {
+                             return (
+                                 <Text style={[styles.navBarText, styles.navBarTitleText]}>
+                                    {route.id}
+                                 </Text>
+                             );
+                          },
+                      }}
+                    />
+                  }
+                >
               </Navigator>
             </DrawerLayoutAndroid>
 
@@ -201,9 +259,7 @@ class MainScreen extends Component{
     .done();
   }
 
-}
-
-
+}   
 
 var styles = StyleSheet.create({
     container: {
@@ -216,7 +272,28 @@ var styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 20,
         color:'#000000',
-    }
+    },
+    navBar: {
+        backgroundColor: '#009688',
+     },
+    navBarText: {
+         color: 'white',
+         fontSize: 16,
+         marginVertical: 10,
+     },
+    navBarTitleText: {
+         fontWeight: '500',
+         marginVertical: 9,
+         color:"#FFFFFF"
+     },
+    navBarLeftButton: {
+         paddingLeft: 10,
+     },
+    navBarRightButton: {
+         padding: 10,
+         paddingTop: 5
+     },
+
 });
 
 

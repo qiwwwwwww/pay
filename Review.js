@@ -29,7 +29,7 @@ class Review extends Component {
 
   _onPressButtonPOST() {
 
-        fetch("http://100.77.188.66:3000/test5", {
+        fetch("http://129.31.204.238:3000/test5", {
           method: "POST", 
           body: JSON.stringify({
             name: this.props.route.passProps.User.name,

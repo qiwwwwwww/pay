@@ -14,8 +14,7 @@ import {
   ListView
 } from 'react-native';
   
-var IMG_URL='http://100.77.188.66:3000/files/';
-var REQUEST_URL='http://100.77.188.66:3000/test5';
+var IMG_URL='http://100.77.188.23:3000/files/';
 var OpenURLButton = React.createClass({
 
   propTypes: {
@@ -46,32 +45,8 @@ var OpenURLButton = React.createClass({
 });
 
 class DetailPage extends Component{
-   constructor(props) {
-    super(props);
-    this.state = {
-      dataSource: new ListView.DataSource({
-         rowHasChanged: (row1, row2) => row1 !== row2,
-      }),
-       loaded: false, 
-  };
-}
+  
 
-componentDidMount() {
-    this.fetchData();
-  }
-
-  fetchData(){
-    fetch(REQUEST_URL)
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData.objects),
-          loaded: true,
-        });
-      })
-      .done();
-      
-  } 
 
   goComment(user){
     this.props.navigator.push({
@@ -84,66 +59,58 @@ componentDidMount() {
   });
 }
 
+  goSeeComment(user){
+    this.props.navigator.push({
+
+    id:'ViewReview',
+    title:'ViewReview',
+        passProps:{
+          User:user,
+        }
+  });
+}
+
 	render(){
     var object = this.props.route.passProps.Object;
     var user = this.props.route.passProps.User;
-    if(!this.state.loaded) {
-        return this.renderLoadingView();
-      }
+
 
     return (
 	      <ScrollView style={styles.scrollView}>
 	        <View style={styles.mainSection}>
-	          <Image
-	            source={{uri:IMG_URL+object.img_id}}
-	            style={styles.detailsImage}
-	          />
-	          <View style={styles.rightPane}>
-	          	<Text style={styles.title}>{object.title}</Text>
-				      <Text style={styles.category}>{object.category}</Text>
+            <Image
+              source={{uri:IMG_URL+object.img_id}}
+              style={styles.detailsImage}
+            />
+            <View style={styles.rightPane}>
+              <Text style={styles.title}>{object.title}</Text>
+              <Text style={styles.category}>{object.category}</Text>
 
               <OpenURLButton url={IMG_URL+object.apkid}/>
             </View>
-	        </View>
+          </View>
 
-	        <View style={styles.separator} />
-	        <Text style={styles.description}>
-	          {object.description}
-	        </Text>
           <View style={styles.separator} />
-
+          <Text style={styles.title}>Description</Text>
+          <Text style={styles.description}>
+            {object.description}
+          </Text>
+          <View style={styles.separator} />
         <Text style={styles.description}>{user.name}</Text>
         <Text style={styles.title} onPress={() => this.goComment(user)}>Write a Review</Text>
-        <View style={styles.separator} />
+        <Text style={styles.title} onPress={() => this.goSeeComment(user)}>View Reviews</Text>
+        
+        <Text style={styles.title}>DPA information</Text>
+        <Text style={styles.description}>Some wikis have an "edit" button or link directly on the page being viewed, if the user has permission to edit the page. This leads to an editing page where participants structure and format wiki pages with a simplified markup language, sometimes known as wikitext. For example, starting lines of text with asterisks creates a bulleted list). The style and syntax of wikitexts can vary greatly among wiki implementations,[example needed] some of which also allow HTML tags. Wikis favour plain-text editing, with fewer and simpler conventions than HTML, for indicating style and structure. Although limiting access to HTML and Cascading Style Sheets (CSS) of wikis limits user ability to alter the structure and formatting of wiki content, there are some benefits. Limited access to CSS promotes consistency in the look and feel, and having JavaScript disabled prevents a user from implementing code that may limit other users' access.</Text>
 
-        <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderObjects.bind(this)}
-            style={styles.listView}
-            />
+        <View style={styles.separator} />
+        <Text style={styles.title}>DPA information</Text>
+
+       
 	      </ScrollView>
     );
   }
 
-  renderLoadingView() {
-  return(
-    <View style={styles.container}>
-    <Text style={styles.title}>
-    Loading comment。。。
-    </Text>
-    </View>
-    );
-}
-
-renderObjects(object){
-
-  return(
-
-    <Text style={styles.description}>{object.comment}</Text>
-
-        
-    );
-  }
 
 }
 
@@ -168,7 +135,6 @@ var styles = StyleSheet.create({
 
   },
   description:{
-    textAlign: 'center',
     fontSize: 15,
     color:'#727272',
   },
@@ -226,13 +192,11 @@ var styles = StyleSheet.create({
   },
   scrollView: {
     backgroundColor: '#FFFFFF',
-    height: 300,
     marginTop:60,
+    height:300
+
   },
-  listView: {
-    paddingTop: 20,
-    backgroundColor: '#F5FCFF',
-  },
+  
 });
 
 module.exports = DetailPage;

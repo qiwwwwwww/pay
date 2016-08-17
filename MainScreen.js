@@ -21,7 +21,8 @@ var FrontPage = require('./FrontPage');
 var DetailPage = require('./DetailPage');
 var SearchResults = require('./SearchResults');
 var Review = require('./Review');
-
+var ViewReview =require('./ViewReview');
+var Category =require('./Category');
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 
 var _navigator; //用来保存navigator
@@ -83,6 +84,13 @@ class MainScreen extends Component{
           case 'Review':
               Part = Review;
               break;    
+          case 'ViewReview':
+              Part = ViewReview;
+              break;  
+          case 'Category':
+              Part = Category;
+              break;   
+     
       }
 
       //注意这里将navigator作为属性props传递给了各个场景组件

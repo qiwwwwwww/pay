@@ -1,267 +1,200 @@
-import React, {
-  Component,
-} from 'react';
+'use strict';
+import React,{Component} from'react';
 import {
   AppRegistry,
-  Image,
-  ListView,
   StyleSheet,
   Text,
-  View,
-  Navigator,
-  TouchableHighlight,
   ViewPagerAndroid,
-  ScrollView,
-  Dimensions
+  ToastAndroid,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
-var IP_ADDRESS = 'http://100.77.188.66:3000';    
-var REQUEST_URL =IP_ADDRESS+'/appstore';
-var IMG_URL=IP_ADDRESS+'/files/';
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full width
-var qu_height=height*0.5;
+var qu_height=height*0.4;
+
+var ViewPager = require('react-native-viewpager');
+
+var source = [
+  {title:'game',icon:require('./img/1.png')},
+  {title:'lifestyle',icon:require('./img/2.png')},
+  {title:'social',icon:require('./img/3.png')},  
+  {title:'Health & Fitness',icon:require('./img/19.png')}
+];
+
+
+const BANNER_IMGS = [  
+    require('./img/front01.png'),
+    require('./img/front02.jpg'),  
+    require('./img/front03.jpg'),    
+    require('./img/front04.jpg')  
+];  
+
+var PagerItem = React.createClass({
+  render(){
+    return(
+      <View style = {{height:80,width:(width/5)}}>
+        <TouchableOpacity activeOpacity={0.8} onPress={()=>this.itemOnClick()}>
+          <Image source={this.props.item.icon} style = {styles.imageStyle} />
+          <Text style={styles.textStyle}>{this.props.item.title}</Text>
+        </TouchableOpacity>
+
+      </View>
+    );
+  },
+
+  itemOnClick(){
+    this.props.onItemClick();
+  }
+});
 
 class FrontPage extends Component {
-    constructor(props) {
-    super(props);
-    this.state = {
-      dataSource: new ListView.DataSource({
-         rowHasChanged: (row1, row2) => row1 !== row2,
-      }),
-       loaded: false, 
 
-  };
-}
+  constructor(props) {  
+      super(props);  
 
-  componentDidMount() {
-    this.fetchData();
-  }
+      var dataSource = new ViewPager.DataSource({  
+          pageHasChanged: (p1, p2) => p1 !== p2,  
+      });  
 
-  fetchData(){
-    fetch(REQUEST_URL)
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData.objects),
-          loaded: true,
-        });
-      })
-      .done();
-      
-  }
-
-render(object) {
-  if(!this.state.loaded) {
-    return this.renderLoadingView();
-  }
-
-  return(
-        <ScrollView style={styles.scrollView}>
-
-        <ViewPagerAndroid style={styles.pageStyle} initialPage={0}>
-          <View style={styles.container}>
-            <Image
-            source={{uri:'http://pokerfuse.com/site_media/media/uploads/news/clash-of-clans_orig_full_sidebar.jpg'}}
-            style={styles.promotionStyle}>
-              <Text style={styles.nestedText}>
-              App Deal of the Week
-              </Text>
-              <Text style={styles.nestedsmallText}>
-              now only 10p
-              </Text>
-            </Image>
-           </View>
-
-          <View style={styles.container}>
-            <Image
-            source={{uri:'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2015/3/18/1426693437380/678bc9d4-f65e-4f63-8fe4-ad1186a7976c-2060x1236.jpeg?w=1200&h=630&q=55&auto=format&usm=12&fit=crop&bm=normal&ba=bottom%2Cleft&blend64=aHR0cHM6Ly91cGxvYWRzLmd1aW0uY28udWsvMjAxNi8wNS8yNS9vdmVybGF5LWxvZ28tMTIwMC05MF9vcHQucG5n&s=4d4ffa7814d93b10f86df956456a139c'}}
-            style={styles.promotionStyle}
-            >
-            <Text style={styles.nestedsmallText}>
-              now only 10p
-              </Text>
-              </Image>
-           </View>
-
-          <View style={styles.container}>
-            <Image
-            source={{uri:'https://i.ytimg.com/vi/_UJRe2-n6Pc/maxresdefault.jpg'}}
-            style={styles.promotionStyle}
-            />
-           </View>
-              
-
-        </ViewPagerAndroid>
-
-          <Text style={styles.title}>Hot This Week</Text>
-
-          <ListView
-            horizontal={true}
-            dataSource={this.state.dataSource}
-            renderRow={this.renderObjects.bind(this)}
-            style={styles.listView}
-          />
-
-          <View style={styles.separator} />
-          <Text style={styles.title}>New Games We Love </Text>
-
-          <ListView
-            horizontal={true}
-            dataSource={this.state.dataSource}
-            renderRow={this.renderObjects.bind(this)}
-            style={styles.listView}
-          />
-
-          <View style={styles.separator} />
-          <Text style={styles.title}>Learn Something new </Text>
-
-          <ListView
-            horizontal={true}
-            dataSource={this.state.dataSource}
-            renderRow={this.renderObjects.bind(this)}
-            style={styles.listView}
-          />
-
-      </ScrollView>
-
-    );
-    } 
-
+      this.state = {  
+          dataSource: dataSource.cloneWithPages(BANNER_IMGS)  
+      }  
+    }  
   
+  renderPagerItem(item,index){
+    return <PagerItem key={index} item={item} onItemClick={() => this.onItemClick(item)}/>;
+  }
 
-renderLoadingView() {
-  return(
-    <View style={styles.container}>
-    <Text style={styles.title}>
-    Loading App。。。
-    </Text>
-    </View>
-    );
-}
+  onItemClick(item){
+    var user=this.props.route.passProps.user;
 
-gotoDetail(object){
-var user=this.props.route.passProps.user;
+    this.toastMessage(item.title);
+       this.props.navigator.push({
 
-if (user!==null) {
-	this.props.navigator.push(
-	{
-    id:'DetailPage',
-		title: 'DetailPage',
-		passProps:{
-      Object: object,
-        User: user,
+        id:'Category',
+        title:'Category',
+         passProps:{
+          User: user,
+          Item:item,
       }
-
-    },
-
-	);
-
-}else{
-  this.props.navigator.push(
-  {
-    id:'DetailPage',
-    title: 'DetailPage',
-    passProps:{
-      Object: object,
-        User: {
-          'name':'guest'
-        },
-      }
-
-    },
-
-  );
+        
+  });
+  }
 
 
-}
+  _renderPage(data, pageID) {  
+      return (  
+          <Image  
+              source={data}  
+              style={styles.promotionStyle}/>  
+      );  
+  }  
 
+  render() {
+    return(
+      <View>
+       <ViewPager  
+          style={{height:200}}  
+          dataSource={this.state.dataSource}  
+          renderPage={this._renderPage}  
+          isLoop={true}  
+          autoPlay={true}/>  
 
-}
-renderObjects(object){
-  return(
+        <Text style={styles.sectionTitle}>Categories</Text>
 
-        <TouchableHighlight 
-      		   		underlayColor='#dddddd'
-      		    	onPress={() => this.gotoDetail(object)}
-      		    >
-          <View style={styles.container}>
-            <Image
-            source={{uri:IMG_URL + object.img_id}}
-            style={styles.thumbnail}
-            />
-      	    <View style={styles.rightContainer}>
-      		    <Text style={styles.year}>{object.title}</Text>
-              <Text style={styles.category}>{object.category}</Text>
-      	    </View>
-        	</View>
-        </TouchableHighlight>
+        <ViewPagerAndroid style = {{alignItems:'center',height:160}} initialPage={0}>
+          {
+            this.getAllPager()
+          }
+        </ViewPagerAndroid>
+          <View style={styles.separator} />
 
+      </View>
     );
+  }
+
+  //返回ViewPager的所有View
+  getAllPager(){
+    var viewArray = [];
+    var data1 = [],data2 = [],data = [];
+    var page = 0;
+    var result = Math.floor(source.length / 10);
+    var rest = source.length % 10;
+    if (result > 0) {
+      page = rest > 0 ? result + 1 : result;
+    }else{
+      page = rest > 0 ? 1 : 0;
+    }
+    var num = page;
+    for (var i = 0; i < page; i++) {
+      data = num > 1 ? source.slice(i * 10,(i + 1) * 10) : source.slice(i * 10,source.length);
+      viewArray.push(this.getPagerView(i,data));
+      num--;
+    }
+    return viewArray;
+  }
+
+  //返回ViewPager的页面
+  getPagerView(i,data){
+    return(
+      <View key={i}>
+        {
+          this.getRowView(data)
+        }
+      </View>
+    );
+  }
+
+  //返回ViewPager一页View对象
+  getRowView(array){
+    if (array.length > 0) {
+      return(
+        <View style={{flexDirection:'row',flexWrap:'wrap'}}>
+          {
+            array.map((item,i) => this.renderPagerItem(item,i))
+          }
+        </View>
+      );
+    }
+  }
+
+  toastMessage(msg){
+    ToastAndroid.show(msg,ToastAndroid.SHORT);
   }
 }
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+  //消费类型部分
+  imageStyle:{
+    marginTop:20,
+    alignSelf:'center',
+    width:45,
+    borderRadius:22.5,
+    height:45
   },
-
-  rightContainer: {
-    flex: 20,
+  textStyle:{
+   marginTop:10,
+   alignSelf:'center',
+   fontSize:14,
+   color:'#555555',
+   textAlign:'center'
   },
-  title: {
+  promotionStyle: {
+    height: qu_height,
+    marginTop:30,
+    width:width,
+  },
+  sectionTitle: {
     fontSize: 15,
     marginBottom: 8,
     textAlign: 'left',
     marginLeft:10,
-    color:'#727272'
-  },
-  year: {
-    textAlign: 'center',
-    fontSize: 10,
     color:'#727272',
-
-  },
-  category:{
-    textAlign: 'center',
-    fontSize: 8,
-    color:'#727272',
-
-  },
-  thumbnail: {
-    width: 81,
-    height: 81,
-    marginLeft:10,
-    marginBottom:10,
-  },
-  listView: {
-    paddingTop: 15,
-    marginLeft:10,
-
-  },
-  pageStyle: {
-    alignItems: 'center',
-    padding: 20,
-    height:200,
-  },
-  promotionStyle: {
-    height: qu_height,
-    marginTop:80,
-    width:width,
-
-  },
-  card: {
-    flex: 1,
-    backgroundColor: '#ccc',
-    width: 80,
-    margin: 10,
-    height: 80,
-    alignItems: 'center',
-    justifyContent: 'center',
+    fontWeight:'bold'
   },
   separator: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -269,26 +202,7 @@ var styles = StyleSheet.create({
     marginVertical: 10,
     marginLeft:10
   },
-  scrollView: {
-    backgroundColor: '#FFFFFF',
-    height: 300,
-  },
-  nestedText: {
-    marginLeft:100,
-    marginTop: 120,
-    backgroundColor: 'transparent',
-    color: 'white',
-    fontWeight:'bold',
-    fontSize:20,
-  },
-  nestedsmallText: {
-    marginLeft:150,
-    marginTop: 130,
-    backgroundColor: 'transparent',
-    color: 'white',
-    fontWeight:'bold',
-    fontSize:15,
-  },
 });
+
   
 module.exports=FrontPage;

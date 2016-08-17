@@ -16,7 +16,7 @@ import {
 
 
 var IP_ADDRESS = 'http:/100.77.188.23:3000';    
-var REQUEST_URL =IP_ADDRESS+'/appstore';
+var REQUEST_URL =IP_ADDRESS+'/category/appstore/';
 var IMG_URL=IP_ADDRESS+'/files/';
 
 class OutlinePage extends Component {
@@ -35,11 +35,13 @@ class OutlinePage extends Component {
   }
 
   fetchData(){
-    fetch(REQUEST_URL)
+    var item=this.props.route.passProps.Item;
+
+    fetch(REQUEST_URL+item.title)
       .then((response) => response.json())
       .then((responseData) => {
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData.objects),
+          dataSource: this.state.dataSource.cloneWithRows(responseData.category),
           loaded: true,
         });
       })
@@ -77,7 +79,7 @@ renderLoadingView() {
 }
 
 gotoDetail(object){
-	var user=this.props.route.passProps.user;
+  var user=this.props.route.passProps.User;
 
 if (user!==null) {
   this.props.navigator.push(
@@ -119,22 +121,22 @@ renderObjects(object){
   return(
 
   <TouchableHighlight 
-		   		underlayColor='#dddddd'
-		    	onPress={() => this.gotoDetail(object)}
-		    >
+          underlayColor='#dddddd'
+          onPress={() => this.gotoDetail(object)}
+        >
     <View style={styles.container}>
       <Image
       source={{uri:IMG_URL + object.img_id}}
       style={styles.thumbnail}
       />
-	    <View style={styles.rightContainer}>
-		    
-		      	<Text style={styles.title}>{object.title}</Text>
+      <View style={styles.rightContainer}>
+        
+            <Text style={styles.title}>{object.title}</Text>
 
-		    <Text style={styles.year}>{object.category}</Text>
-	    </View>
+        <Text style={styles.year}>{object.category}</Text>
+      </View>
 
-  	</View>
+    </View>
 </TouchableHighlight>
 
     );

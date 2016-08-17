@@ -17,11 +17,6 @@ import {
 
 } from 'react-native';
 
-
-var OutlineNav = require('./OutlineNav');
-var FrontNav = require('./FrontNav');
-var SearchNav = require('./SearchNav');
-var Profile = require('./Profile');
 var MainScreen = require('./MainScreen');
 
 var _navigator;

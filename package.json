@@ -13,6 +13,7 @@
     "react-native-drawer": "^2.2.6",
     "react-native-google-signin": "^0.8.0",
     "react-native-scrollable-tab-view": "^0.5.3",
-    "react-native-vector-icons": "^2.0.3"
+    "react-native-vector-icons": "^2.0.3",
+    "react-native-viewpager": "^0.2.11"
   }
 }

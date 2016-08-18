@@ -73,6 +73,28 @@ class DetailPage extends Component{
 	render(){
     var object = this.props.route.passProps.Object;
     var user = this.props.route.passProps.User;
+    var DPA_description;
+        if(object.scopes){
+          DPA_description=
+            <View>
+            <Text style={styles.castActor}>url:{object.url}</Text>
+            <Text style={styles.castActor}>App Id:{object.app_id}</Text>
+            <Text style={styles.castActor}>Valid Time:{object.valid_time}</Text>
+            <Text style={styles.castActor}>Service Id:{object.service_id}</Text>
+            <Text style={styles.castActor}>Monetary Return:{object.monetary_return}</Text>
+            <Text style={styles.castActor}>scopes:</Text>
+            <Text style={styles.castActor}>amount:{object.scopes[0].amount}</Text>
+            <Text style={styles.castActor}>frequency:{object.scopes[0].frequency}</Text>
+            <Text style={styles.castActor}>name:{object.scopes[0].name}</Text>
+            </View>
+          }else{
+            DPA_description=
+            <View>
+              <Text style={styles.castActor}>DPA information is unknown.</Text>
+            </View>
+          }
+
+
 
 
     return (
@@ -97,14 +119,15 @@ class DetailPage extends Component{
           </Text>
           <View style={styles.separator} />
         <Text style={styles.description}>{user.name}</Text>
-        <Text style={styles.title} onPress={() => this.goComment(user)}>Write a Review</Text>
-        <Text style={styles.title} onPress={() => this.goSeeComment(user)}>View Reviews</Text>
-        
-        <Text style={styles.title}>DPA information</Text>
-        <Text style={styles.description}>Some wikis have an "edit" button or link directly on the page being viewed, if the user has permission to edit the page. This leads to an editing page where participants structure and format wiki pages with a simplified markup language, sometimes known as wikitext. For example, starting lines of text with asterisks creates a bulleted list). The style and syntax of wikitexts can vary greatly among wiki implementations,[example needed] some of which also allow HTML tags. Wikis favour plain-text editing, with fewer and simpler conventions than HTML, for indicating style and structure. Although limiting access to HTML and Cascading Style Sheets (CSS) of wikis limits user ability to alter the structure and formatting of wiki content, there are some benefits. Limited access to CSS promotes consistency in the look and feel, and having JavaScript disabled prevents a user from implementing code that may limit other users' access.</Text>
+
+        <View style={styles.reviewView}>
+        <Text style={styles.review} onPress={() => this.goComment(user)}>Write a Review</Text>
+        <Text style={styles.review} onPress={() => this.goSeeComment(user)}>View Reviews</Text>
+        </View>
 
         <View style={styles.separator} />
         <Text style={styles.title}>DPA information</Text>
+          {DPA_description}
 
        
 	      </ScrollView>
@@ -125,6 +148,18 @@ var styles = StyleSheet.create({
     marginTop:15,
     fontWeight: '500',
     color:'#727272'
+  },
+  reviewView:{
+    flexDirection:'row'
+  },
+  review: {
+    flex: 1,
+    fontSize: 16,
+    marginTop:15,
+    fontWeight: '500',
+    color:'#727272',
+    flexDirection:'column',
+
   },
   category:{
     flex: 1,

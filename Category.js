@@ -56,13 +56,13 @@ render() {
   }
 
   return(
-
+  <ScrollView>
     <ListView
     dataSource={this.state.dataSource}
     renderRow={this.renderObjects.bind(this)}
     style={styles.listView}
     />
-
+  </ScrollView>
     );
     } 
 
@@ -149,7 +149,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
   },
   rightContainer: {
     flex: 20,
@@ -174,7 +174,7 @@ var styles = StyleSheet.create({
   },
   listView: {
     paddingTop: 60,
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
     paddingBottom: 20,
   },
 

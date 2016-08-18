@@ -54,12 +54,13 @@ render() {
   }
 
   return(
-
-    <ListView
-    dataSource={this.state.dataSource}
-    renderRow={this.renderObjects.bind(this)}
-    style={styles.listView}
-    />
+    <ScrollView>
+      <ListView
+      dataSource={this.state.dataSource}
+      renderRow={this.renderObjects.bind(this)}
+      style={styles.listView}
+      />
+    </ScrollView>
 
     );
     } 

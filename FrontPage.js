@@ -19,24 +19,40 @@ var qu_height=height*0.4;
 var ViewPager = require('react-native-viewpager');
 
 var source = [
-  {title:'game',icon:require('./img/1.png')},
-  {title:'lifestyle',icon:require('./img/2.png')},
-  {title:'social',icon:require('./img/3.png')},  
-  {title:'Health & Fitness',icon:require('./img/19.png')}
+  {title:'Game',icon:require('./img/1.png')},
+  {title:'Social',icon:require('./img/2.png')},
+  {title:'Lifestyle',icon:require('./img/3.png')},
+  {title:'Education',icon:require('./img/4.png')},  
+  {title:'Communication',icon:require('./img/5.png')},  
+  {title:'Sports',icon:require('./img/6.png')},  
+  {title:'Music & Audio',icon:require('./img/7.png')},  
+  {title:'Shopping',icon:require('./img/8.png')},  
+  {title:'Productivity',icon:require('./img/9.png')},  
+  {title:'Business',icon:require('./img/10.png')},  
+  {title:'Medical',icon:require('./img/11.png')},  
+  {title:'Tools',icon:require('./img/12.png')},  
+  {title:'Transportation',icon:require('./img/13.png')},  
+  {title:'Weather',icon:require('./img/14.png')},  
+  {title:'Travel & Local',icon:require('./img/15.png')},  
+  {title:'Photography',icon:require('./img/16.png')},  
+  {title:'Personalization',icon:require('./img/17.png')},  
+  {title:'News & Magazines',icon:require('./img/18.png')},  
+  {title:'Books & Reference',icon:require('./img/19.png')},  
+  {title:'Health & Fitness',icon:require('./img/20.png')}
 ];
 
 
 const BANNER_IMGS = [  
     require('./img/front01.png'),
     require('./img/front02.jpg'),  
-    require('./img/front03.jpg'),    
+    require('./img/front03.jpg'),
     require('./img/front04.jpg')  
 ];  
 
 var PagerItem = React.createClass({
   render(){
     return(
-      <View style = {{height:80,width:(width/5)}}>
+      <View style = {styles.categorySeView}>
         <TouchableOpacity activeOpacity={0.8} onPress={()=>this.itemOnClick()}>
           <Image source={this.props.item.icon} style = {styles.imageStyle} />
           <Text style={styles.textStyle}>{this.props.item.title}</Text>
@@ -98,7 +114,7 @@ class FrontPage extends Component {
     return(
       <View>
        <ViewPager  
-          style={{height:200}}  
+          style={styles.categoryView}  
           dataSource={this.state.dataSource}  
           renderPage={this._renderPage}  
           isLoop={true}  
@@ -122,8 +138,8 @@ class FrontPage extends Component {
     var viewArray = [];
     var data1 = [],data2 = [],data = [];
     var page = 0;
-    var result = Math.floor(source.length / 10);
-    var rest = source.length % 10;
+    var result = Math.floor(source.length / 8);
+    var rest = source.length % 8;
     if (result > 0) {
       page = rest > 0 ? result + 1 : result;
     }else{
@@ -131,7 +147,7 @@ class FrontPage extends Component {
     }
     var num = page;
     for (var i = 0; i < page; i++) {
-      data = num > 1 ? source.slice(i * 10,(i + 1) * 10) : source.slice(i * 10,source.length);
+      data = num > 1 ? source.slice(i * 8,(i + 1) * 8) : source.slice(i * 8,source.length);
       viewArray.push(this.getPagerView(i,data));
       num--;
     }
@@ -168,18 +184,31 @@ class FrontPage extends Component {
 }
 
 var styles = StyleSheet.create({
-  //消费类型部分
+categoryView:{
+    height: qu_height,
+    width:width,
+
+},  
+categorySeView:{
+  height:80,
+  width:(width/4)
+},
+
   imageStyle:{
-    marginTop:20,
     alignSelf:'center',
-    width:45,
+    width:60,
     borderRadius:22.5,
-    height:45
+    height:60,
+    marginLeft:5,
+    marginRight:5
   },
   textStyle:{
-   marginTop:10,
+   marginLeft:2,
+   marginBottom:3,
+   marginRight:3,
    alignSelf:'center',
-   fontSize:14,
+   fontSize:11.5,
+   fontWeight:'bold',
    color:'#555555',
    textAlign:'center'
   },
@@ -197,10 +226,13 @@ var styles = StyleSheet.create({
     fontWeight:'bold'
   },
   separator: {
+    marginTop:10,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     height: StyleSheet.hairlineWidth,
     marginVertical: 10,
-    marginLeft:10
+    marginLeft:10,
+    marginRight:10
+
   },
 });
 

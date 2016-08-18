@@ -24,6 +24,11 @@ var Review = require('./Review');
 var ViewReview =require('./ViewReview');
 var Category =require('./Category');
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+var MD = require('react-native-material-design');
+var {
+    Card, Button, Avatar, Drawer, Divider, COLOR, TYPO
+} = MD;
+
 
 var _navigator; //用来保存navigator
 BackAndroid.addEventListener('hardwareBackPress', () => {
@@ -101,8 +106,12 @@ class MainScreen extends Component{
         _navigator.push({
             id: target,
             passProps:{user: this.state.user},
-
         });
+
+        this.setState({
+            route: target
+          });
+
         this.refs['DRAWER'].closeDrawer();
     
     }
@@ -110,15 +119,46 @@ class MainScreen extends Component{
       render() {
         if (!this.state.user) {
           var navigationView = (
-            <View style={{flex: 1, backgroundColor: '#607D8B'}}>
-              <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
-              <GoogleSigninButton style={{width: 230, height: 48, marginTop:300}} color={GoogleSigninButton.Color.Light} size={GoogleSigninButton.Size.Wide} onPress={() => { this._signIn(); }}/>
-              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>OutlinePage</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>FrontPage</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>SearchPage</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>Profile</Text>
-            </View>
-          );
+            <Drawer theme='dark'>
+            <Drawer.Header image={<Image source={require('./img/default.jpg')} />}>
+                <View style={styles.header}>
+                    <Avatar size={80} image={<Image source={{ uri: "http://facebook.github.io/react-native/img/opengraph.png?2" }}/>} />
+                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>React Native</Text>
+                </View>
+            </Drawer.Header>
+
+            <Drawer.Section
+                  items={[{
+                    icon: 'home',
+                    value: 'Featured',
+                    active: !this.state.route || this.state.route  === 'FrontPage',
+                    onPress: () => this.onNavPress('FrontPage'),
+                    onLongPress: () => this.onNavPress('FrontPage')
+                },
+                {
+                    icon: 'message',
+                    value: 'All Apps',
+                    active: !this.state.route  || this.state.route  === 'OutlinePage',
+                    onPress: () => this.onNavPress('OutlinePage'),
+                    onLongPress: () => this.onNavPress('OutlinePage')
+                },
+                {
+                    icon: 'search',
+                    value: 'Search',
+                    active: !this.state.route  || this.state.route  === 'SearchPage',
+                    onPress: () => this.onNavPress('SearchPage'),
+                    onLongPress: () => this.onNavPress('SearchPage')
+                },
+                {
+                    icon: 'settings',
+                    value: 'Log in',
+                    onPress: () => this._signIn(),
+                    onLongPress: () => this._signIn()
+                }]}
+            />
+        </Drawer>
+    );
+  
       return (
           <DrawerLayoutAndroid
             ref={'DRAWER'}
@@ -187,7 +227,7 @@ class MainScreen extends Component{
 
           );
 
-        }
+       } 
         var self_photo;
         if (this.state.user.photo !== null)
           {
@@ -202,25 +242,60 @@ class MainScreen extends Component{
           }
         if (this.state.user) {
 
-          var navigationView = (
-            <View style={{flex: 1, backgroundColor: '#607D8B'}}>
-              <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>I'm in the Drawer!</Text>
-              <Text style={{margin: 10, fontSize: 15, textAlign: 'left', color: '#000000'}}>{this.state.user.name}</Text>
-              <Text style={styles.button} onPress={() => {this._signOut();}}> Log Out</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('Profile')}>My Profile</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('OutlinePage')}>OutlinePage</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('FrontPage')}>FrontPage</Text>
-              <Text style={styles.button} onPress={() => this.onNavPress('SearchPage')}>SearchPage</Text>
+            var navigationView = (
+            <Drawer theme='dark'>
+            <Drawer.Header image={<Image source={require('./img/default.jpg')} />}>
+                <View style={styles.header}>
+                    <Avatar size={80} image={<Image source={{ uri: "http://facebook.github.io/react-native/img/opengraph.png?2" }}/>} />
+                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>React Native</Text>
+                </View>
+            </Drawer.Header>
 
-            </View>
-          );
+            <Drawer.Section
+                  items={[{
+                    icon: 'home',
+                    value: 'Featured',
+                    active: this.state.route  === 'FrontPage',
+                    onPress: () => this.onNavPress('FrontPage'),
+                    onLongPress: () => this.onNavPress('FrontPage')
+                },
+                {
+                    icon: 'message',
+                    value: 'ALL Apps',
+                    active: this.state.route  === 'OutlinePage',
+                    onPress: () => this.onNavPress('OutlinePage'),
+                    onLongPress: () => this.onNavPress('OutlinePage')
+                },
+                {
+                    icon: 'search',
+                    value: 'Search',
+                    active: this.state.route  === 'SearchPage',
+                    onPress: () => this.onNavPress('SearchPage'),
+                    onLongPress: () => this.onNavPress('SearchPage')
+                },
+                {
+                    icon: 'face',
+                    value: 'My Profile',
+                    active: this.state.route  === 'Profile',
+                    onPress: () => this.onNavPress('Profile'),
+                    onLongPress: () => this.onNavPress('Profile')
+                },
+                {
+                    icon: 'settings',
+                    value: 'Log Out',
+                    onPress: () => this._signOut(),
+                    onLongPress: () => this._signOut()
+                }
+                ]}
+            />
+        </Drawer>
+    );
 
          
           return (
           <DrawerLayoutAndroid
             ref={'DRAWER'}
             drawerWidth = {200}
-            drawerBackgroundColor="#607D8B"
             drawerPosition={DrawerLayoutAndroid.positions.Left}
             renderNavigationView={() => navigationView}>
               <Navigator
@@ -263,7 +338,7 @@ class MainScreen extends Component{
                                      <TouchableOpacity
                                          style={styles.navBarRightButton}>
                                          <Image
-                                            source={require('./img/menu.png')}
+                                            source={require('./img/like.png')}
                                             style={{width: 30, height: 30, marginLeft: 10}} />
                                       </TouchableOpacity>
                                       ); 

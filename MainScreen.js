@@ -31,7 +31,7 @@ var {
 } = MD;
 
 
-var _navigator; //用来保存navigator
+var _navigator; 
 BackAndroid.addEventListener('hardwareBackPress', () => {
     if (_navigator.getCurrentRoutes().length === 1) {
         return false;
@@ -112,7 +112,6 @@ class MainScreen extends Component{
      
       }
 
-      //注意这里将navigator作为属性props传递给了各个场景组件
       return <Part navigator = {navigator} route={router} />;
       }
 
@@ -130,51 +129,111 @@ class MainScreen extends Component{
     
     }
 
+  render() {
+    var navigationView;
+    if (!this.state.user) {
+      navigationView = (
+        <Drawer theme='dark'>
+          <Drawer.Header image={<Image source={require('./img/background.jpg')} />}>
+              <View style={styles.header}>
+              <Image source={require('./img/default.png')} style={styles.thumbnail}/>
+                  <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>Guest</Text>
+              </View>
+          </Drawer.Header>
 
-
-      render() {
-        if (!this.state.user) {
-          var navigationView = (
-            <Drawer theme='dark'>
-            <Drawer.Header image={<Image source={require('./img/background.jpg')} />}>
-                <View style={styles.header}>
-                <Image source={require('./img/default.png')} style={styles.thumbnail}/>
-                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>Guest</Text>
-                </View>
-            </Drawer.Header>
-
-            <Drawer.Section
-                  items={[{
-                    icon: 'home',
-                    value: 'Featured',
-                    active: !this.state.route || this.state.route  === 'FrontPage',
-                    onPress: () => this.onNavPress('FrontPage'),
-                    onLongPress: () => this.onNavPress('FrontPage')
-                },
-                {
-                    icon: 'message',
-                    value: 'All Apps',
-                    active: !this.state.route  || this.state.route  === 'OutlinePage',
-                    onPress: () => this.onNavPress('OutlinePage'),
-                    onLongPress: () => this.onNavPress('OutlinePage')
-                },
-                {
-                    icon: 'search',
-                    value: 'Search',
-                    active: !this.state.route  || this.state.route  === 'SearchPage',
-                    onPress: () => this.onNavPress('SearchPage'),
-                    onLongPress: () => this.onNavPress('SearchPage')
-                },
-                {
-                    icon: 'settings',
-                    value: 'Log in via Google',
-                    onPress: () => this._signIn(),
-                    onLongPress: () => this._signIn()
-                }]}
-            />
+          <Drawer.Section
+                items={[{
+                  icon: 'home',
+                  value: 'Featured',
+                  active: !this.state.route || this.state.route  === 'FrontPage',
+                  onPress: () => this.onNavPress('FrontPage'),
+                  onLongPress: () => this.onNavPress('FrontPage')
+              },
+              {
+                  icon: 'message',
+                  value: 'All Apps',
+                  active: !this.state.route  || this.state.route  === 'OutlinePage',
+                  onPress: () => this.onNavPress('OutlinePage'),
+                  onLongPress: () => this.onNavPress('OutlinePage')
+              },
+              {
+                  icon: 'search',
+                  value: 'Search',
+                  active: !this.state.route  || this.state.route  === 'SearchPage',
+                  onPress: () => this.onNavPress('SearchPage'),
+                  onLongPress: () => this.onNavPress('SearchPage')
+              },
+              {
+                  icon: 'settings',
+                  value: 'Log in via Google',
+                  onPress: () => this._signIn(),
+                  onLongPress: () => this._signIn()
+              }]}
+          />
         </Drawer>
-    );
-  
+      );
+    }
+    if (this.state.user) {
+    var self_photo;
+    if (this.state.user.photo !== null)
+      {
+        self_photo=
+          <Image source={{uri: this.state.user.photo}}
+            style={styles.thumbnail}/>;
+      } else{
+        self_photo=
+          <Image source={require('./img/default.png')} 
+              style={styles.thumbnail}/> ;
+      }
+      navigationView = (
+        <Drawer theme='dark'>
+          <Drawer.Header image={<Image source={require('./img/background.jpg')} />}>
+              <View style={styles.header}>
+                    {self_photo}
+                  <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>{this.state.user.name}</Text>
+              </View>
+          </Drawer.Header>
+
+          <Drawer.Section
+              items={[{
+                icon: 'home',
+                value: 'Featured',
+                active: this.state.route  === 'FrontPage',
+                onPress: () => this.onNavPress('FrontPage'),
+                onLongPress: () => this.onNavPress('FrontPage')
+            },
+            {
+                icon: 'message',
+                value: 'ALL Apps',
+                active: this.state.route  === 'OutlinePage',
+                onPress: () => this.onNavPress('OutlinePage'),
+                onLongPress: () => this.onNavPress('OutlinePage')
+            },
+            {
+                icon: 'search',
+                value: 'Search',
+                active: this.state.route  === 'SearchPage',
+                onPress: () => this.onNavPress('SearchPage'),
+                onLongPress: () => this.onNavPress('SearchPage')
+            },
+            {
+                icon: 'face',
+                value: 'My Profile',
+                active: this.state.route  === 'Profile',
+                onPress: () => this.onNavPress('Profile'),
+                onLongPress: () => this.onNavPress('Profile')
+            },
+            {
+                icon: 'settings',
+                value: 'Log Out',
+                onPress: () => this._signOut(),
+                onLongPress: () => this._signOut()
+            }
+            ]}
+          />
+        </Drawer>
+        );
+      }
       return (
           <DrawerLayoutAndroid
             ref={'DRAWER'}
@@ -243,6 +302,53 @@ class MainScreen extends Component{
                                         <View style={styles.modalContainer}>
                                             <Text style={styles.aboutTitle}>About Pay by Data</Text>
                                             <Text style={styles.aboutContent}>With the spreading usage of mobile devices, user generated data collection becomes a grey legal area issue. The reasons are due to less obvious position of usage statements and vague notifications by developers. In other words, there is a gap between users and developers on mobile data collections. </Text>
+                                            <View style={styles.separator} />
+
+                                            <Text style={styles.aboutSubTitle}>How does this work?</Text>
+                                              <View style={{flex: 1, flexDirection: 'row', marginTop:10}}>
+                                              
+                                                <View>
+                                                  <Image
+                                                    source={require('./img/find.png')}
+                                                    style={{width: 40, height: 40, marginLeft: 10,marginRight:10}} />
+                                                </View>
+                                                
+                                                <View>
+                                                  <Text style={styles.step}>STEP 1: Find your favourite App.</Text>
+                                                </View>
+                                              
+                                              </View>
+
+                                              <View style={{flex: 1, flexDirection: 'row', marginTop:10,}}>
+                                              
+                                                <View>
+                                                  <Image
+                                                    source={require('./img/download.png')}
+                                                    style={{width: 40, height: 40, marginLeft: 10,marginRight:10}} />
+                                                </View>
+                                                
+                                                <View>
+                                                  <Text style={styles.step}>STEP 2: Download it.</Text>
+                                                </View>
+
+                                              </View>
+
+                                              <View style={{flex: 1, flexDirection: 'row', marginTop:10,}}>
+                                              
+                                                <View>
+                                                  <Image
+                                                    source={require('./img/enjoy.png')}
+                                                    style={{width: 40, height: 40, marginLeft: 10,marginRight:10}} />
+                                                </View>
+                                                
+                                                <View>
+                                                  <Text style={styles.step}>STEP 3: Enjoy using it.</Text>
+                                                </View>
+
+                                              </View>
+                                              <View style={styles.separator} />
+                                              <Text style={styles.aboutSubTitle}>Please contact elfishing07@gmail.com for any question.</Text>
+                                              <Text style={styles.copyRight}>Copyright © Pay By Data 2016</Text>
 
                                         </View>
                                       </Modal>
@@ -267,155 +373,9 @@ class MainScreen extends Component{
           );
 
        } 
-        var self_photo;
-        if (this.state.user.photo !== null)
-          {
-            self_photo=
-              <Image source={{uri: this.state.user.photo}}
-                style={styles.thumbnail}/>;
-
-          } else{
-            self_photo=<Image source={require('./img/default.png')} 
-                style={styles.thumbnail}/> ;
-
-          }
-        if (this.state.user) {
-
-            var navigationView = (
-            <Drawer theme='dark'>
-            <Drawer.Header image={<Image source={require('./img/background.jpg')} />}>
-                <View style={styles.header}>
-                      {self_photo}
-                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>{this.state.user.name}</Text>
-                </View>
-            </Drawer.Header>
-
-            <Drawer.Section
-                  items={[{
-                    icon: 'home',
-                    value: 'Featured',
-                    active: this.state.route  === 'FrontPage',
-                    onPress: () => this.onNavPress('FrontPage'),
-                    onLongPress: () => this.onNavPress('FrontPage')
-                },
-                {
-                    icon: 'message',
-                    value: 'ALL Apps',
-                    active: this.state.route  === 'OutlinePage',
-                    onPress: () => this.onNavPress('OutlinePage'),
-                    onLongPress: () => this.onNavPress('OutlinePage')
-                },
-                {
-                    icon: 'search',
-                    value: 'Search',
-                    active: this.state.route  === 'SearchPage',
-                    onPress: () => this.onNavPress('SearchPage'),
-                    onLongPress: () => this.onNavPress('SearchPage')
-                },
-                {
-                    icon: 'face',
-                    value: 'My Profile',
-                    active: this.state.route  === 'Profile',
-                    onPress: () => this.onNavPress('Profile'),
-                    onLongPress: () => this.onNavPress('Profile')
-                },
-                {
-                    icon: 'settings',
-                    value: 'Log Out',
-                    onPress: () => this._signOut(),
-                    onLongPress: () => this._signOut()
-                }
-                ]}
-            />
-        </Drawer>
-    );
-
-         
-          return (
-          <DrawerLayoutAndroid
-            ref={'DRAWER'}
-            drawerWidth = {200}
-            drawerPosition={DrawerLayoutAndroid.positions.Left}
-            renderNavigationView={() => navigationView}>
-              <Navigator
-                  initialRoute ={{id: 'FrontPage'}}
-                  configureScene = {this.configureScene}
-                  renderScene = {this.renderScene}
-                  navigationBar={
-                    <Navigator.NavigationBar
-                      style={styles.navBar}
-                      routeMapper={{
-                         LeftButton:(route, navigator, index, navState) => {
-                            switch(route.id){
-                              case 'FrontPage':
-                              case 'OutlinePage':
-                              case 'SearchPage':
-                              case 'Profile':
-                                return(
-                                    <TouchableOpacity
-                                        style={styles.navBarLeftButton}
-                                        onPress={() => this.refs['DRAWER'].openDrawer()}>
-                                        <Image
-                                            source={require('./img/menu.png')}
-                                            style={{width: 30, height: 30, marginLeft: 8, marginRight: 8}} />
-                                    </TouchableOpacity>
-                                         );
-                              default:
-                                return (
-                                    <TouchableOpacity
-                                      style={styles.navBarLeftButton}
-                                      onPress={() => {_navigator.pop()}}>
-                                      <Image
-                                         source={require('./img/return.png')}
-                                         style={{width: 20, height: 20, marginLeft: 10 }} />
-                                    </TouchableOpacity>
-                                      );
-                                    }
-                                  },
-                        RightButton:(route, navigator, index, navState)=> {
-                              return (
-                                    <View>
-                                     <TouchableOpacity
-                                         style={styles.navBarRightButton}
-                                                 onPress={this.showModal}>
-                                         <Image
-                                            source={require('./img/about.png')}
-                                            style={{width: 35, height: 35, marginLeft: 10}} />
-                                      </TouchableOpacity>
-                                      <Modal visible={this.state.visible}>
-                                        <TouchableHighlight
-                                            style={[styles.button_01, styles.close]}
-                                            underlayColor="#aaa"
-                                            onPress={this.hideModal}
-                                        >
-                                            <Text>Close</Text>
-                                        </TouchableHighlight>
-
-                                        <View style={styles.modalContainer}>
-                                            <Text style={styles.text}>Amazing!</Text>
-                                        </View>
-                                      </Modal>
-                                      </View>
-                                      ); 
-                                   }, 
- 
-                         Title:(route, navigator, index, navState)=> {
-                             return (
-                                 <Text style={[styles.navBarText, styles.navBarTitleText]}>
-                                    {route.id}
-                                 </Text>
-                             );
-                          },
-                      }}
-                    />
-                  }
-                >
-              </Navigator>
-            </DrawerLayoutAndroid>
-
-          );
-      }
-  }
+        
+    
+  
   async _setupGoogleSignin() {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });
@@ -470,9 +430,9 @@ class MainScreen extends Component{
 var styles = StyleSheet.create({
     container: {
         backgroundColor: '#FFF',
-        flex: 1, //flex-grow:1 等分剩余空间
-        justifyContent: 'center', //定义了项目在主轴上的对齐方式
-        alignItems: 'center', //定义项目在交叉轴上如何对齐
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center', 
     },
     button: {
         borderRadius: 5,
@@ -500,15 +460,15 @@ var styles = StyleSheet.create({
          padding: 10,
          paddingTop: 5
      },
-  thumbnail: {
-    borderWidth:2,
-    marginLeft:20,
-    borderColor:'#607D8B',
-    borderRadius: 100,
-    width: 100,
-    height: 100,
-    marginTop: 20,
-  },
+    thumbnail: {
+        borderWidth:2,
+        marginLeft:20,
+        borderColor:'#607D8B',
+        borderRadius: 100,
+        width: 100,
+        height: 100,
+        marginTop: 20,
+    },
       button_01: {
         padding: 10
     },
@@ -518,8 +478,9 @@ var styles = StyleSheet.create({
         top: 40,
     },
     modalContainer: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
+        marginTop:80,
+        marginLeft:20,
+        marginRight:20,
     },
     aboutTitle: {
         color: '#fff',
@@ -530,16 +491,45 @@ var styles = StyleSheet.create({
     aboutContent: {
         color: '#fff',
         fontSize:15,
+        marginTop:5,
+    },
+    aboutSubTitle: {
+        color: '#fff',
+        fontSize:20,
+        fontWeight:'bold',
+        textAlign:'left',
+        marginTop:10
+    },
+    step: {
+        color: '#fff',
+        fontSize:15,
+        fontWeight:'bold',
+        textAlign:'left',
+        marginTop:10
+    },
+    copyRight: {
+        color: '#fff',
+        fontSize:10,
+        fontWeight:'bold',
+        textAlign:'center',
+        marginBottom:10,
+        marginTop:20,
     },
     modal: {
         top: 0,
         right: 0,
         bottom: 0,
         left: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
     },
+    separator: {
+        marginTop:10,
+        backgroundColor: '#FFFFFF',
+        height: StyleSheet.hairlineWidth,
+        marginVertical: 10,
+        marginLeft:10,
+        marginRight:10
+  },
 });
 
 

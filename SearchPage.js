@@ -12,7 +12,7 @@ var {
   ActivityIndicator
 } = ReactNative;
 
-var IP_ADDRESS = 'http://100.77.188.23:3000';  
+var IP_ADDRESS = 'http://100.77.188.56:3000';  
 var REQUEST_URL = IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
 var FILENAME_URL = IP_ADDRESS+'/filename/appstore/';
@@ -28,7 +28,7 @@ class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    searchString: 'YouTube',
+    searchString: '',
     isLoading: false,
     message: ''
 
@@ -102,26 +102,28 @@ class SearchPage extends Component {
         <Text style={styles.description}>
           Search for apps to download!
         </Text>
-        <Text style={styles.description}>
-          Search by exact app name.
+        {spinner}
+        <Text style={styles.errorMessage}>{this.state.message}</Text>
+        <Text style={styles.tipMessage}>
+          Search by keywords.
         </Text>
+        <View style={{flexDirection: 'row'}}>
         <View style={styles.flowRight}>
           <TextInput
             style={styles.searchInput}
             value={this.state.searchString}
             onChange={this.onSearchTextChanged.bind(this)}
             placeholder='Search via name'/>
+        </View>
+
           <TouchableHighlight style={styles.button}
-              underlayColor='#99d9f4'
               onPress={this.onSearchPressed.bind(this)}
               >
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
         </View>
-
         <Image source={require('./img/app.png')} style={styles.image}/>
-          {spinner}
-        <Text style={styles.description}>{this.state.message}</Text>
+
 
       </View>
     );
@@ -136,6 +138,20 @@ var styles = StyleSheet.create({
     color: '#656565',
     marginTop: 65,
   },
+  errorMessage: {
+    marginBottom: 10,
+    fontSize: 15,
+    textAlign: 'center',
+    color: 'red',
+    marginTop: 50,
+  },
+  tipMessage: {
+    marginBottom: 20,
+    fontSize: 18,
+    textAlign: 'center',
+    color: '#656565',
+    marginTop: 30,
+  },
   container: {
     flex:1,
     padding:20,
@@ -143,35 +159,29 @@ var styles = StyleSheet.create({
     backgroundColor:'#FFFFFF'
   },
   flowRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'stretch',
-
+    borderColor: 'grey',
+    borderWidth: 1,
+    marginLeft:30,
+    marginRight:10,
+    flex:4,
   },
   buttonText: {
-    fontSize: 18,
-    color: 'white',
-    alignSelf: 'center'
+    color:'#FFFFFF',
+    textAlign: 'center',
   },
   button: {
-    height: 36,
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#48BBEC',
-    borderColor: '#48BBEC',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
+      marginTop:10,
+      backgroundColor: '#757575',
+      padding: 10,
+      borderRadius: 20,
+      flex:1,
   },
   searchInput: {
-    height: 50,
-    flex: 3,
-    fontSize: 18,
-    color:'#727272'
+    backgroundColor: '#B2DFDB',
+    textAlign: 'justify',
   },
   image: {
+    marginTop:10,
     width: 217,
     height: 138
   }

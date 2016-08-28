@@ -18,7 +18,7 @@ import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import {TabLayoutAndroid, TabAndroid} from "react-native-android-kit";
 
 var width = Dimensions.get('window').width; //full width
-var REQUEST_URL='http://100.77.188.23:3000/test5';
+var REQUEST_URL='http://100.77.188.56:3000/test6';
 
 class Review extends Component {
    constructor(props) {
@@ -52,11 +52,13 @@ componentDidMount() {
         return this.renderLoadingView();
       }
     return(
+      <ScrollView>
        <ListView
             dataSource={this.state.dataSource}
             renderRow={this.renderObjects.bind(this)}
             style={styles.listView}
             />
+      </ScrollView>      
       );
   }
 
@@ -73,9 +75,18 @@ componentDidMount() {
 renderObjects(object){
 
   return(
-
-    <Text style={styles.singleListView}>{object.comment}</Text>
-
+    <View>
+      <Text style={styles.singleListView}>{object.title}</Text>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View>
+          <Text style={styles.singleListView}>{object.name}</Text>
+        </View>
+        <View>
+          <Text style={styles.singleListView}>{object.created_at}</Text>
+        </View>
+      </View>
+      <Text style={styles.singleListView}>{object.comment}</Text>
+    </View>
         
     );
   }

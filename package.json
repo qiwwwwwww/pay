@@ -13,7 +13,9 @@
     "react-native-drawer": "^2.2.6",
     "react-native-google-signin": "^0.8.0",
     "react-native-material-design": "^0.3.7",
+    "react-native-rating-star": "^0.2.1",
     "react-native-scrollable-tab-view": "^0.5.3",
+    "react-native-star-rating": "^1.0.6",
     "react-native-vector-icons": "^2.0.3",
     "react-native-viewpager": "^0.2.11"
   }

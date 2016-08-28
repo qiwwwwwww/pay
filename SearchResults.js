@@ -13,7 +13,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-  var IMG_URL='http://100.77.188.23:3000/files/';
+  var IMG_URL='http://100.77.188.56:3000/files/';
 
 class SearchResults extends Component {
   constructor(props) {
@@ -104,6 +104,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    marginTop:30,
   },
   rightContainer: {
     flex: 20,

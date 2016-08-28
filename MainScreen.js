@@ -116,14 +116,16 @@ class MainScreen extends Component{
     
     }
 
+
+
       render() {
         if (!this.state.user) {
           var navigationView = (
             <Drawer theme='dark'>
-            <Drawer.Header image={<Image source={require('./img/default.jpg')} />}>
+            <Drawer.Header image={<Image source={require('./img/background.jpg')} />}>
                 <View style={styles.header}>
-                    <Avatar size={80} image={<Image source={{ uri: "http://facebook.github.io/react-native/img/opengraph.png?2" }}/>} />
-                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>React Native</Text>
+                <Image source={require('./img/default.png')} style={styles.thumbnail}/>
+                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>Guest</Text>
                 </View>
             </Drawer.Header>
 
@@ -151,7 +153,7 @@ class MainScreen extends Component{
                 },
                 {
                     icon: 'settings',
-                    value: 'Log in',
+                    value: 'Log in via Google',
                     onPress: () => this._signIn(),
                     onLongPress: () => this._signIn()
                 }]}
@@ -201,16 +203,28 @@ class MainScreen extends Component{
                                     }
                                   },
                       RightButton:(route, navigator, index, navState)=> {
+                            switch(route.id){
+                              case 'Review':
                                 return (
                                      <TouchableOpacity
                                          style={styles.navBarRightButton}>
                                          <Image
-                                            source={require('./img/menu.png')}
+                                            source={require('./img/star.png')}
+                                            style={{width: 30, height: 30, marginLeft: 10}} />
+                                      </TouchableOpacity>
+                                );
+
+                              default:
+                                return (
+                                     <TouchableOpacity
+                                         style={styles.navBarRightButton}>
+                                         <Image
+                                            source={require('./img/like.png')}
                                             style={{width: 30, height: 30, marginLeft: 10}} />
                                       </TouchableOpacity>
                                       ); 
-                                    },
- 
+                                    }
+                                },
                       Title:(route, navigator, index, navState)=> {
                                 return (
                                  <Text style={[styles.navBarText, styles.navBarTitleText]}>
@@ -236,7 +250,7 @@ class MainScreen extends Component{
                 style={styles.thumbnail}/>;
 
           } else{
-            self_photo=<Image source={require('./img/default.jpg')} 
+            self_photo=<Image source={require('./img/default.png')} 
                 style={styles.thumbnail}/> ;
 
           }
@@ -244,10 +258,10 @@ class MainScreen extends Component{
 
             var navigationView = (
             <Drawer theme='dark'>
-            <Drawer.Header image={<Image source={require('./img/default.jpg')} />}>
+            <Drawer.Header image={<Image source={require('./img/background.jpg')} />}>
                 <View style={styles.header}>
-                    <Avatar size={80} image={<Image source={{ uri: "http://facebook.github.io/react-native/img/opengraph.png?2" }}/>} />
-                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>React Native</Text>
+                      {self_photo}
+                    <Text style={[styles.text, COLOR.paperGrey50, TYPO.paperFontSubhead]}>{this.state.user.name}</Text>
                 </View>
             </Drawer.Header>
 
@@ -328,12 +342,24 @@ class MainScreen extends Component{
                                       onPress={() => {_navigator.pop()}}>
                                       <Image
                                          source={require('./img/return.png')}
-                                         style={{width: 30, height: 30, marginLeft: 10}} />
+                                         style={{width: 20, height: 20, marginLeft: 10 }} />
                                     </TouchableOpacity>
                                       );
                                     }
                                   },
                         RightButton:(route, navigator, index, navState)=> {
+                            switch(route.id){
+                              case 'Review':
+                                return (
+                                     <TouchableOpacity
+                                         style={styles.navBarRightButton}>
+                                         <Image
+                                            source={require('./img/star.png')}
+                                            style={{width: 30, height: 30, marginLeft: 10}} />
+                                      </TouchableOpacity>
+                                );
+
+                              default:
                               return (
                                      <TouchableOpacity
                                          style={styles.navBarRightButton}>
@@ -342,7 +368,8 @@ class MainScreen extends Component{
                                             style={{width: 30, height: 30, marginLeft: 10}} />
                                       </TouchableOpacity>
                                       ); 
-                                    },
+                                    }
+                                   }, 
  
                          Title:(route, navigator, index, navState)=> {
                              return (
@@ -439,11 +466,21 @@ var styles = StyleSheet.create({
      },
     navBarLeftButton: {
          paddingLeft: 10,
+         marginTop:5,
      },
     navBarRightButton: {
          padding: 10,
          paddingTop: 5
      },
+  thumbnail: {
+    borderWidth:2,
+    marginLeft:20,
+    borderColor:'#607D8B',
+    borderRadius: 100,
+    width: 100,
+    height: 100,
+    marginTop: 20,
+  },
 
 });
 

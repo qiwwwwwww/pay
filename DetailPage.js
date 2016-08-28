@@ -14,7 +14,7 @@ import {
   ListView
 } from 'react-native';
   
-var IMG_URL='http://100.77.188.23:3000/files/';
+var IMG_URL='http://100.77.188.56:3000/files/';
 var OpenURLButton = React.createClass({
 
   propTypes: {

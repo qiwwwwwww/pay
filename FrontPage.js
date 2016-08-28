@@ -9,7 +9,10 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  View
+  View,
+  ListView,
+  TouchableHighlight,
+  ScrollView
 } from 'react-native';
 
 var width = Dimensions.get('window').width; //full width
@@ -17,7 +20,11 @@ var height = Dimensions.get('window').height; //full width
 var qu_height=height*0.4;
 
 var ViewPager = require('react-native-viewpager');
+var IP_ADDRESS = 'http://100.77.188.56:3000';    
+var REQUEST_URL_01 =IP_ADDRESS+'/category/appstore/Game';
+var REQUEST_URL_02 =IP_ADDRESS+'/category/appstore/Social';
 
+var IMG_URL=IP_ADDRESS+'/files/';
 var source = [
   {title:'Game',icon:require('./img/1.png')},
   {title:'Social',icon:require('./img/2.png')},
@@ -57,7 +64,6 @@ var PagerItem = React.createClass({
           <Image source={this.props.item.icon} style = {styles.imageStyle} />
           <Text style={styles.textStyle}>{this.props.item.title}</Text>
         </TouchableOpacity>
-
       </View>
     );
   },
@@ -77,10 +83,50 @@ class FrontPage extends Component {
       });  
 
       this.state = {  
+         Game: new ListView.DataSource({
+         rowHasChanged: (row1, row2) => row1 !== row2,
+          }),
+          Social: new ListView.DataSource({
+          rowHasChanged: (row1, row2) => row1 !== row2,
+          }),
+          loaded: false, 
           dataSource: dataSource.cloneWithPages(BANNER_IMGS)  
       }  
     }  
   
+
+  componentDidMount() {
+    this.fetchGame();
+    this.fetchSocial();
+
+  }
+
+  fetchGame(){
+    fetch(REQUEST_URL_01)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          Game: this.state.Game.cloneWithRows(responseData.category),
+          loaded: true,
+        });
+      })
+      .done();
+      
+  }
+  fetchSocial(){
+    fetch(REQUEST_URL_02)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          Social: this.state.Social.cloneWithRows(responseData.category),
+          loaded: true,
+        });
+      })
+      .done();
+      
+  }
+
+
   renderPagerItem(item,index){
     return <PagerItem key={index} item={item} onItemClick={() => this.onItemClick(item)}/>;
   }
@@ -111,8 +157,11 @@ class FrontPage extends Component {
   }  
 
   render() {
+    if(!this.state.loaded) {
+    return this.renderLoadingView();
+      }
     return(
-      <View>
+      <ScrollView>
        <ViewPager  
           style={styles.categoryView}  
           dataSource={this.state.dataSource}  
@@ -128,8 +177,24 @@ class FrontPage extends Component {
           }
         </ViewPagerAndroid>
           <View style={styles.separator} />
+          <Text style={styles.sectionTitle}>New Games We Recomand</Text>
 
-      </View>
+            <ListView
+            dataSource={this.state.Game}
+            renderRow={this.renderObjects.bind(this)}
+            style={styles.listView}
+            horizontal={true}
+            />
+          <View style={styles.separator} />
+          <Text style={styles.sectionTitle}>New Social App We Upload</Text>
+
+            <ListView
+            dataSource={this.state.Social}
+            renderRow={this.renderObjects.bind(this)}
+            style={styles.listView}
+            horizontal={true}
+            />
+      </ScrollView>
     );
   }
 
@@ -181,19 +246,92 @@ class FrontPage extends Component {
   toastMessage(msg){
     ToastAndroid.show(msg,ToastAndroid.SHORT);
   }
+
+  renderLoadingView() {
+  return(
+    <View style={styles.container}>
+    <Text style={styles.title}>
+    Loading App。。。
+    </Text>
+    </View>
+    );
+}
+
+gotoDetail(object){
+  var user=this.props.route.passProps.user;
+
+if (user!==null) {
+  this.props.navigator.push(
+  {
+    id:'DetailPage',
+    title: 'DetailPage',
+    passProps:{
+      Object: object,
+        User: user,
+      }
+
+    },
+
+  );
+
+}else{
+  this.props.navigator.push(
+  {
+    id:'DetailPage',
+    title: 'DetailPage',
+    passProps:{
+      Object: object,
+        User: {
+          'name':'guest'
+        },
+      }
+
+    },
+
+  );
+
+
+}
+
+}
+
+renderObjects(object){
+
+  return(
+
+  <TouchableHighlight 
+          underlayColor='#dddddd'
+          onPress={() => this.gotoDetail(object)}
+        >
+    <View style={styles.container}>
+      <Image
+      source={{uri:IMG_URL + object.img_id}}
+      style={styles.appImg}
+      />
+      <View style={styles.rightContainer}>
+        
+            <Text style={styles.appTitle}>{object.title}</Text>
+
+        <Text style={styles.appCategory}>{object.category}</Text>
+      </View>
+
+    </View>
+</TouchableHighlight>
+
+    );
+  }
 }
 
 var styles = StyleSheet.create({
-categoryView:{
-    height: qu_height,
-    width:width,
-
-},  
-categorySeView:{
-  height:80,
-  width:(width/4)
-},
-
+  categoryView:{
+      height: qu_height,
+      width:width,
+      flex:0.3
+  },  
+  categorySeView:{
+    height:80,
+    width:(width/4)
+  },
   imageStyle:{
     alignSelf:'center',
     width:60,
@@ -214,8 +352,9 @@ categorySeView:{
   },
   promotionStyle: {
     height: qu_height,
-    marginTop:30,
+    marginTop:50,
     width:width,
+    flex:0.5
   },
   sectionTitle: {
     fontSize: 15,
@@ -232,7 +371,28 @@ categorySeView:{
     marginVertical: 10,
     marginLeft:10,
     marginRight:10
-
+  },
+  listView: {
+    paddingTop: 10,
+    backgroundColor: '#FFFFFF',
+    flex:0.4
+  },
+  appTitle: {
+    fontSize: 10,
+    marginBottom: 8,
+    textAlign: 'center',
+    color:'#727272'
+  },
+  appCategory: {
+    textAlign: 'center',
+    color:'#727272',
+    fontSize: 8,
+  },
+  appImg: {
+    width: 81,
+    height: 81,
+    marginLeft:10,
+    marginBottom:10,
   },
 });
 

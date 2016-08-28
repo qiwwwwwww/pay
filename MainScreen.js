@@ -13,6 +13,7 @@ import{
   BackAndroid,
 
 } from 'react-native';
+import Modal from 'react-native-root-modal';
 
 var OutlinePage = require('./OutlinePage');
 var SearchPage = require('./SearchPage');
@@ -45,13 +46,26 @@ class MainScreen extends Component{
     super(props);
     this.state={
       user:null,
-      commet: 'hello',
+      visible: false
+
     }
   }
 
   componentDidMount(){
     this._setupGoogleSignin();
   }
+
+  showModal = () => {
+        this.setState({
+            visible: true
+        });
+    };
+
+    hideModal = () => {
+        this.setState({
+            visible: false
+        });
+    };
 
 
   openDrawer() {
@@ -187,7 +201,7 @@ class MainScreen extends Component{
                                         onPress={() => this.refs['DRAWER'].openDrawer()}>
                                         <Image
                                             source={require('./img/menu.png')}
-                                            style={{width: 40, height: 40, marginLeft: 8, marginRight: 8}} />
+                                            style={{width: 30, height: 30, marginLeft: 8, marginRight: 8}} />
                                     </TouchableOpacity>
                                          );
                               default:
@@ -203,28 +217,39 @@ class MainScreen extends Component{
                                     }
                                   },
                       RightButton:(route, navigator, index, navState)=> {
-                            switch(route.id){
-                              case 'Review':
-                                return (
+                               return (
+                                    <View>
                                      <TouchableOpacity
-                                         style={styles.navBarRightButton}>
+                                         style={styles.navBarRightButton}
+                                                 onPress={this.showModal}>
                                          <Image
-                                            source={require('./img/star.png')}
-                                            style={{width: 30, height: 30, marginLeft: 10}} />
+                                            source={require('./img/about.png')}
+                                            style={{width: 35, height: 35, marginLeft: 10}} />
                                       </TouchableOpacity>
-                                );
+                                      <Modal 
+                                        style={styles.modal}
+                                        visible={this.state.visible}>
+                                        <TouchableHighlight
+                                            style={[styles.button_01, styles.close]}
+                                            underlayColor="#aaa"
+                                            onPress={this.hideModal}
+                                            >
+                                        <Image
+                                         source={require('./img/close.png')}
+                                         style={{width: 20, height: 20, marginLeft: 10 }} />
 
-                              default:
-                                return (
-                                     <TouchableOpacity
-                                         style={styles.navBarRightButton}>
-                                         <Image
-                                            source={require('./img/like.png')}
-                                            style={{width: 30, height: 30, marginLeft: 10}} />
-                                      </TouchableOpacity>
+                                        </TouchableHighlight>
+
+                                        <View style={styles.modalContainer}>
+                                            <Text style={styles.aboutTitle}>About Pay by Data</Text>
+                                            <Text style={styles.aboutContent}>With the spreading usage of mobile devices, user generated data collection becomes a grey legal area issue. The reasons are due to less obvious position of usage statements and vague notifications by developers. In other words, there is a gap between users and developers on mobile data collections. </Text>
+
+                                        </View>
+                                      </Modal>
+                                      </View>
                                       ); 
-                                    }
-                                },
+                                   }, 
+
                       Title:(route, navigator, index, navState)=> {
                                 return (
                                  <Text style={[styles.navBarText, styles.navBarTitleText]}>
@@ -332,7 +357,7 @@ class MainScreen extends Component{
                                         onPress={() => this.refs['DRAWER'].openDrawer()}>
                                         <Image
                                             source={require('./img/menu.png')}
-                                            style={{width: 40, height: 40, marginLeft: 8, marginRight: 8}} />
+                                            style={{width: 30, height: 30, marginLeft: 8, marginRight: 8}} />
                                     </TouchableOpacity>
                                          );
                               default:
@@ -348,27 +373,30 @@ class MainScreen extends Component{
                                     }
                                   },
                         RightButton:(route, navigator, index, navState)=> {
-                            switch(route.id){
-                              case 'Review':
-                                return (
-                                     <TouchableOpacity
-                                         style={styles.navBarRightButton}>
-                                         <Image
-                                            source={require('./img/star.png')}
-                                            style={{width: 30, height: 30, marginLeft: 10}} />
-                                      </TouchableOpacity>
-                                );
-
-                              default:
                               return (
+                                    <View>
                                      <TouchableOpacity
-                                         style={styles.navBarRightButton}>
+                                         style={styles.navBarRightButton}
+                                                 onPress={this.showModal}>
                                          <Image
-                                            source={require('./img/like.png')}
-                                            style={{width: 30, height: 30, marginLeft: 10}} />
+                                            source={require('./img/about.png')}
+                                            style={{width: 35, height: 35, marginLeft: 10}} />
                                       </TouchableOpacity>
+                                      <Modal visible={this.state.visible}>
+                                        <TouchableHighlight
+                                            style={[styles.button_01, styles.close]}
+                                            underlayColor="#aaa"
+                                            onPress={this.hideModal}
+                                        >
+                                            <Text>Close</Text>
+                                        </TouchableHighlight>
+
+                                        <View style={styles.modalContainer}>
+                                            <Text style={styles.text}>Amazing!</Text>
+                                        </View>
+                                      </Modal>
+                                      </View>
                                       ); 
-                                    }
                                    }, 
  
                          Title:(route, navigator, index, navState)=> {
@@ -481,7 +509,37 @@ var styles = StyleSheet.create({
     height: 100,
     marginTop: 20,
   },
-
+      button_01: {
+        padding: 10
+    },
+    close: {
+        position: 'absolute',
+        right: 20,
+        top: 40,
+    },
+    modalContainer: {
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+    },
+    aboutTitle: {
+        color: '#fff',
+        fontSize:25,
+        fontWeight:'bold',
+        textAlign:'center',
+    },
+    aboutContent: {
+        color: '#fff',
+        fontSize:15,
+    },
+    modal: {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    },
 });
 
 

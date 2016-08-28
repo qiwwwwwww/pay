@@ -13,7 +13,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-  var IMG_URL='http://100.77.188.56:3000/files/';
+  var IMG_URL='http://100.77.188.59:3000/files/';
 
 class SearchResults extends Component {
   constructor(props) {

@@ -14,7 +14,7 @@ import {
   ListView
 } from 'react-native';
   
-var IMG_URL='http://100.77.188.56:3000/files/';
+var IMG_URL='http://100.77.188.59:3000/files/';
 var OpenURLButton = React.createClass({
 
   propTypes: {
@@ -35,9 +35,10 @@ var OpenURLButton = React.createClass({
     return (
       <TouchableOpacity
         onPress={this.handleClick}>
-        <View>
-            <Image source={require('./img/downloadButton.png')} 
-        style={styles.buttonImage}/>
+        <View style={{borderColor: '#009688',
+            borderWidth:1, marginBottom:20, marginLeft:80,marginRight:40,borderRadius: 5,
+}}>
+          <Text style={{color:'#009688',textAlign:'center', fontSize:15}}>GET</Text>
         </View>
       </TouchableOpacity>
     );
@@ -100,10 +101,12 @@ class DetailPage extends Component{
     return (
 	      <ScrollView style={styles.scrollView}>
 	        <View style={styles.mainSection}>
+  
             <Image
               source={{uri:IMG_URL+object.img_id}}
               style={styles.detailsImage}
             />
+ 
             <View style={styles.rightPane}>
               <Text style={styles.title}>{object.title}</Text>
               <Text style={styles.category}>{object.category}</Text>
@@ -118,11 +121,14 @@ class DetailPage extends Component{
             {object.description}
           </Text>
           <View style={styles.separator} />
-        <Text style={styles.description}>{user.name}</Text>
 
         <View style={styles.reviewView}>
-        <Text style={styles.review} onPress={() => this.goComment(user)}>Write a Review</Text>
-        <Text style={styles.review} onPress={() => this.goSeeComment(user)}>View Reviews</Text>
+          <View style={styles.button}>
+            <Text style={styles.review} onPress={() => this.goComment(user)}>Write a Review</Text>
+          </View>
+          <View style={styles.button}>
+            <Text style={styles.review} onPress={() => this.goSeeComment(user)}>View Reviews</Text>
+          </View>
         </View>
 
         <View style={styles.separator} />
@@ -144,28 +150,32 @@ var styles = StyleSheet.create({
   },
   title: {
     flex: 1,
-    fontSize: 16,
-    marginTop:15,
+    fontSize: 20,
+    marginTop:25,
+    marginLeft:20,
     fontWeight: '500',
     color:'#727272'
   },
   reviewView:{
-    flexDirection:'row'
+    flexDirection:'row',
+  },
+  button:{
+    borderColor: '#009688',
+    borderWidth:1, 
+    borderRadius: 5,
+    marginRight:50,
+    marginLeft:20,
+    padding:10
   },
   review: {
-    flex: 1,
+    color:'#009688',
+    textAlign:'center',
     fontSize: 16,
-    marginTop:15,
-    fontWeight: '500',
-    color:'#727272',
-    flexDirection:'column',
-
   },
   category:{
-    flex: 1,
-    fontSize: 15,
-    marginLeft:20,
-    marginTop:15,
+    fontSize: 12,
+    marginBottom:50,
+    marginLeft:40,
     color:'#727272',
 
   },
@@ -201,7 +211,8 @@ var styles = StyleSheet.create({
   detailsImage: {
     width: 160,
     height: 160,
-    marginRight: 10,
+    margin:10,
+    borderRadius: 50,
   },
   buttonImage: {
     width: 80,

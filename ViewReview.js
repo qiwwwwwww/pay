@@ -18,7 +18,7 @@ import StarRating from 'react-native-star-rating';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var width = Dimensions.get('window').width; //full width
-var REQUEST_URL='http://100.77.188.56:3000/test6';
+var REQUEST_URL='http://100.77.188.59:3000/test6';
 
 class Review extends Component {
    constructor(props) {
@@ -84,8 +84,8 @@ var month = new Date(object.created_at).getMonth();
 var year = new Date(object.created_at).getFullYear();
 
   return(
-    <View>
-      <Text style={styles.singleListView}>{object.title}</Text>
+    <View style={styles.commentContainer}>
+      <Text style={styles.titleText}>{object.title}</Text>
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.starRate}>
           <StarRating
@@ -101,13 +101,14 @@ var year = new Date(object.created_at).getFullYear();
           />
         </View>
         <View style={styles.name}>
-          <Text style={styles.singleListView}>{object.name}</Text>
+          <Text style={styles.nameText}>{object.name}</Text>
         </View>
         <View>
           <Text style={styles.singleListView}>-{date}/{month}/{year}</Text>
         </View>
       </View>
-      <Text style={styles.singleListView}>{object.comment}</Text>
+      <Text style={styles.comment}>{object.comment}</Text>
+      <View style={styles.separator} />
 
     </View>
         
@@ -126,8 +127,24 @@ const styles = StyleSheet.create({
     backgroundColor:'#FFFFFF',
     marginTop:200,
   },
+  commentContainer: {
+    marginLeft:20,
+    marginRight:20,
+  },
   listView: {
-    marginTop:100,
+    marginTop:80,
+  },
+  nameText:{
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#727272',
+    fontWeight:'bold',
+  },
+  titleText:{
+    textAlign: 'left',
+    fontSize: 25,
+    color:'#727272',
+
   },
   singleListView:{
     textAlign: 'center',
@@ -138,11 +155,23 @@ const styles = StyleSheet.create({
     marginLeft:10,
     marginRight:10,
   },
+  comment:{
+    textAlign: 'left',
+    fontSize: 15,
+    color:'#727272',
+  },
   starRate:{
     marginLeft:10,
     marginRight:10,
   },
-  
+  separator: {
+    marginTop:10,
+    marginLeft:10,
+    marginRight:10,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    height: StyleSheet.hairlineWidth,
+    marginVertical: 10,
+  },
 });
 
 

@@ -12,7 +12,7 @@ var {
   ActivityIndicator
 } = ReactNative;
 
-var IP_ADDRESS = 'http://100.77.188.56:3000';  
+var IP_ADDRESS = 'http://100.77.188.59:3000';  
 var REQUEST_URL = IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
 var FILENAME_URL = IP_ADDRESS+'/filename/appstore/';

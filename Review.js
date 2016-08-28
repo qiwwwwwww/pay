@@ -36,7 +36,7 @@ class Review extends Component {
 
   _onPressButtonPOST() {
       if(this.state.comment!==''){
-        fetch("http://100.77.188.56:3000/test6", {
+        fetch("http://100.77.188.59:3000/test6", {
           method: "POST", 
           body: JSON.stringify({
             name: this.props.route.passProps.User.name,

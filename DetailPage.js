@@ -78,20 +78,20 @@ class DetailPage extends Component{
         if(object.scopes){
           DPA_description=
             <View>
-            <Text style={styles.castActor}>url:{object.url}</Text>
-            <Text style={styles.castActor}>App Id:{object.app_id}</Text>
-            <Text style={styles.castActor}>Valid Time:{object.valid_time}</Text>
-            <Text style={styles.castActor}>Service Id:{object.service_id}</Text>
-            <Text style={styles.castActor}>Monetary Return:{object.monetary_return}</Text>
-            <Text style={styles.castActor}>scopes:</Text>
-            <Text style={styles.castActor}>amount:{object.scopes[0].amount}</Text>
-            <Text style={styles.castActor}>frequency:{object.scopes[0].frequency}</Text>
-            <Text style={styles.castActor}>name:{object.scopes[0].name}</Text>
+            <Text style={styles.dpaDetail}>url:{object.url}</Text>
+            <Text style={styles.dpaDetail}>App Id:{object.app_id}</Text>
+            <Text style={styles.dpaDetail}>Valid Time:{object.valid_time}</Text>
+            <Text style={styles.dpaDetail}>Service Id:{object.service_id}</Text>
+            <Text style={styles.dpaDetail}>Monetary Return:{object.monetary_return}</Text>
+            <Text style={styles.dpaDetail}>scopes:</Text>
+            <Text style={styles.dpaDetail}>amount:{object.scopes[0].amount}</Text>
+            <Text style={styles.dpaDetail}>frequency:{object.scopes[0].frequency}</Text>
+            <Text style={styles.dpaDetail}>name:{object.scopes[0].name}</Text>
             </View>
           }else{
             DPA_description=
             <View>
-              <Text style={styles.castActor}>DPA information is unknown.</Text>
+              <Text style={styles.dpaDetail}>DPA information is unknown.</Text>
             </View>
           }
 
@@ -109,14 +109,14 @@ class DetailPage extends Component{
  
             <View style={styles.rightPane}>
               <Text style={styles.title}>{object.title}</Text>
-              <Text style={styles.category}>{object.category}</Text>
+              <Text style={styles.category}>Category - {object.category}</Text>
 
               <OpenURLButton url={IMG_URL+object.apkid}/>
             </View>
           </View>
 
           <View style={styles.separator} />
-          <Text style={styles.title}>Description</Text>
+          <Text style={styles.sectionTitle}>Description</Text>
           <Text style={styles.description}>
             {object.description}
           </Text>
@@ -132,7 +132,7 @@ class DetailPage extends Component{
         </View>
 
         <View style={styles.separator} />
-        <Text style={styles.title}>DPA information</Text>
+        <Text style={styles.sectionTitle}>DPA information</Text>
           {DPA_description}
 
        
@@ -149,10 +149,16 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    flex: 1,
     fontSize: 20,
-    marginTop:25,
+    marginTop:20,
     marginLeft:20,
+    fontWeight: 'bold',
+    color:'#727272'
+  },
+  sectionTitle: {
+    flex: 1,
+    fontSize: 18,
+    marginLeft:10,
     fontWeight: '500',
     color:'#727272'
   },
@@ -174,14 +180,14 @@ var styles = StyleSheet.create({
   },
   category:{
     fontSize: 12,
-    marginBottom:50,
-    marginLeft:40,
+    marginLeft:20,
     color:'#727272',
-
   },
   description:{
     fontSize: 15,
     color:'#727272',
+    marginLeft:15,
+    marginRight:15,
   },
   rating: {
     marginTop: 10,
@@ -224,17 +230,12 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     height: StyleSheet.hairlineWidth,
     marginVertical: 10,
+    marginLeft:10,
+    marginRight:10,
   },
-  castTitle: {
-    fontWeight: '500',
-    marginBottom: 3,
+  dpaDetail: {
+    marginLeft: 15,
     color:'#727272',
-
-  },
-  castActor: {
-    marginLeft: 2,
-    color:'#727272',
-
   },
   scrollView: {
     backgroundColor: '#FFFFFF',

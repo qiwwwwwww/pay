@@ -18,7 +18,8 @@ import StarRating from 'react-native-star-rating';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var width = Dimensions.get('window').width; //full width
-var REQUEST_URL='http://100.77.188.59:3000/test6';
+var REQUEST_URL='http://100.77.188.62:3000/comment/test6/';
+var C_URL;
 
 class Review extends Component {
    constructor(props) {
@@ -28,7 +29,8 @@ class Review extends Component {
          rowHasChanged: (row1, row2) => row1 !== row2,
       }),
        loaded: false,
-       starCount:0, 
+       starCount:0,
+       apptitle: this.props.route.passProps.Object.title,
   };
 }
 componentDidMount() {
@@ -40,12 +42,14 @@ componentDidMount() {
       starCount: rating
     });
   }
+
   fetchData(){
-    fetch(REQUEST_URL)
+    
+    fetch(REQUEST_URL+this.state.apptitle)
       .then((response) => response.json())
       .then((responseData) => {
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData.objects),
+          dataSource: this.state.dataSource.cloneWithRows(responseData.appTitle),
           loaded: true,
         });
       })
@@ -54,15 +58,22 @@ componentDidMount() {
   } 
 
   render(){
+    var rowCount =this.state.dataSource.getRowCount()
         if(!this.state.loaded) {
         return this.renderLoadingView();
       }
+        if(rowCount==0 ){
+          return this.renderNoCommentView();
+       }   
+
     return(
+
       <ScrollView>
        <ListView
             dataSource={this.state.dataSource}
             renderRow={this.renderObjects.bind(this)}
             style={styles.listView}
+            enableEmptySections={true}
             />
       </ScrollView>      
       );
@@ -71,8 +82,18 @@ componentDidMount() {
    renderLoadingView() {
   return(
     <View style={styles.container}>
-    <Text style={styles.title}>
-    Loading comment。。。
+    <Text style={styles.warning}>
+    Loading comment...
+    </Text>
+    </View>
+    );
+}
+
+   renderNoCommentView() {
+  return(
+    <View style={styles.container}>
+    <Text style={styles.warning}>
+        There is no comment yet.
     </Text>
     </View>
     );
@@ -113,6 +134,7 @@ var year = new Date(object.created_at).getFullYear();
     </View>
         
     );
+
   }
 
 
@@ -125,7 +147,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor:'#FFFFFF',
-    marginTop:200,
   },
   commentContainer: {
     marginLeft:20,
@@ -172,6 +193,12 @@ const styles = StyleSheet.create({
     height: StyleSheet.hairlineWidth,
     marginVertical: 10,
   },
+  warning:{
+    marginTop:50,
+    fontSize:20,
+    textAlign: 'center',
+    color:'#727272',
+  }
 });
 
 

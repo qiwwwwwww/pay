@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 
 
-var IP_ADDRESS = 'http://100.77.188.59:3000';    
+var IP_ADDRESS = 'http://100.77.188.62:3000';    
 var REQUEST_URL =IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
 
@@ -126,13 +126,13 @@ renderObjects(object){
     <View style={styles.container}>
       <Image
       source={{uri:IMG_URL + object.img_id}}
-      style={styles.thumbnail}
+      style={styles.appImage}
       />
 	    <View style={styles.rightContainer}>
 		    
 		      	<Text style={styles.title}>{object.title}</Text>
 
-		    <Text style={styles.year}>{object.category}</Text>
+		    <Text style={styles.category}>{object.category}</Text>
 	    </View>
 
   	</View>
@@ -160,16 +160,19 @@ var styles = StyleSheet.create({
     color:'#727272'
 
   },
-  year: {
+  category: {
     textAlign: 'center',
-    color:'#727272'
+    color:'#727272',
+    fontSize:12,
 
   },
-  thumbnail: {
+  appImage: {
     width: 81,
     height: 81,
     marginLeft:10,
     marginBottom:10,
+    borderRadius: 20,
+
   },
   listView: {
     paddingTop: 60,

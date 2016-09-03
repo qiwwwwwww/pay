@@ -4,27 +4,23 @@ module.exports = function (scene) {
     var componentMap = {
         'FrontPage': {
             title: 'FrontPage',
-            id: 'FrontPage'
+            id: 'FrontPage',
         },
         'OutlinePage': {
             title: 'OutlinePage',
-            id: 'OutlinePage'
+            id: 'OutlinePage',
         },
         'SearchPage': {
             title: 'SearchPage',
-            id: 'SearchPage'
+            id: 'SearchPage',
         },
         'Profile': {
             title: 'Profile',
-            id: 'Profile'
+            id: 'Profile',
         },
         'DetailPage': {
             title: 'DetailPage',
-            id: 'DetailPage'
-        },
-        'UsageList': {
-            title: 'UsageList',
-            id: 'UsageList'
+            id: 'DetailPage',
         },
     }
 

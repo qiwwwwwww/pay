@@ -36,7 +36,7 @@ class Review extends Component {
 
   _onPressButtonPOST() {
       if(this.state.comment!==''){
-        fetch("http://100.77.188.59:3000/test6", {
+        fetch("http://100.77.188.62:3000/test6", {
           method: "POST", 
           body: JSON.stringify({
             name: this.props.route.passProps.User.name,
@@ -44,6 +44,8 @@ class Review extends Component {
             star: this.state.starCount,
             title: this.state.title,
             comment: this.state.comment,
+            appTitle: this.props.route.passProps.Object.title,
+
           }),
           headers:{
             'Content-Type': 'application/json', 
@@ -60,7 +62,7 @@ class Review extends Component {
       }else {
       Alert.alert(
                 "Please write a comment",
-                "you can not post emtpy content " 
+                "you can not post empty content " 
             )
     }
 }

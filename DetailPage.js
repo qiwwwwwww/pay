@@ -11,10 +11,11 @@ import {
   View,
   TouchableOpacity,
   Linking,
-  ListView
+  ListView,
+  WebView
 } from 'react-native';
   
-var IMG_URL='http://100.77.188.59:3000/files/';
+var IMG_URL='http://100.77.188.62:3000/files/';
 var OpenURLButton = React.createClass({
 
   propTypes: {
@@ -36,8 +37,7 @@ var OpenURLButton = React.createClass({
       <TouchableOpacity
         onPress={this.handleClick}>
         <View style={{borderColor: '#009688',
-            borderWidth:1, marginBottom:20, marginLeft:80,marginRight:40,borderRadius: 5,
-}}>
+            borderWidth:1, marginBottom:20, marginLeft:120,marginRight:40,borderRadius: 5,}}>
           <Text style={{color:'#009688',textAlign:'center', fontSize:15}}>GET</Text>
         </View>
       </TouchableOpacity>
@@ -50,23 +50,31 @@ class DetailPage extends Component{
 
 
   goComment(user){
+    var object = this.props.route.passProps.Object;
+  
     this.props.navigator.push({
 
     id:'Review',
     title:'Review',
         passProps:{
           User:user,
+          Object: object,
+
         }
   });
 }
 
   goSeeComment(user){
+    var object = this.props.route.passProps.Object;
+
     this.props.navigator.push({
 
     id:'ViewReview',
     title:'ViewReview',
         passProps:{
           User:user,
+          Object: object,
+
         }
   });
 }
@@ -74,20 +82,95 @@ class DetailPage extends Component{
 	render(){
     var object = this.props.route.passProps.Object;
     var user = this.props.route.passProps.User;
+
     var DPA_description;
         if(object.scopes){
+          var valid_time= (object.valid_time)/3600000/24;
+          var valid_time= valid_time.toFixed(1);
+
+          var monetary_return= object.monetary_return>0 ? object.monetary_return : 'None';
+          var frequency= (object.scopes[0].frequency)/3600000;
+
           DPA_description=
-            <View>
-            <Text style={styles.dpaDetail}>url:{object.url}</Text>
-            <Text style={styles.dpaDetail}>App Id:{object.app_id}</Text>
-            <Text style={styles.dpaDetail}>Valid Time:{object.valid_time}</Text>
-            <Text style={styles.dpaDetail}>Service Id:{object.service_id}</Text>
-            <Text style={styles.dpaDetail}>Monetary Return:{object.monetary_return}</Text>
-            <Text style={styles.dpaDetail}>scopes:</Text>
-            <Text style={styles.dpaDetail}>amount:{object.scopes[0].amount}</Text>
-            <Text style={styles.dpaDetail}>frequency:{object.scopes[0].frequency}</Text>
-            <Text style={styles.dpaDetail}>name:{object.scopes[0].name}</Text>
+          <View style={{flexDirection:'column', marginTop:10, marginBottom:20}}>
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>url</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.urldetail}
+                onPress={() => Linking.openURL(object.url)}> {object.url}
+                </Text>
+              </View>
+
             </View>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Valid Time</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {valid_time} Day</Text>
+              </View>
+
+            </View>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Service Id</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {object.service_id}</Text>
+              </View>
+
+            </View>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Monetary Return</Text>
+              </View>
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {monetary_return}</Text>
+              </View>
+            </View>
+
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Scopes name</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {object.scopes[0].name}</Text>
+              </View>
+
+            </View>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Scopes amount</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {object.scopes[0].amount}</Text>
+              </View>
+
+            </View>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Scopes frequency</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {frequency} per Hour</Text>
+              </View>
+
+            </View>
+          </View>
           }else{
             DPA_description=
             <View>
@@ -109,7 +192,7 @@ class DetailPage extends Component{
  
             <View style={styles.rightPane}>
               <Text style={styles.title}>{object.title}</Text>
-              <Text style={styles.category}>Category - {object.category}</Text>
+              <Text style={styles.category}>{object.category}</Text>
 
               <OpenURLButton url={IMG_URL+object.apkid}/>
             </View>
@@ -132,7 +215,43 @@ class DetailPage extends Component{
         </View>
 
         <View style={styles.separator} />
-        <Text style={styles.sectionTitle}>DPA information</Text>
+        <Text style={styles.sectionTitle}>Information</Text>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Category</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {object.category}</Text>
+              </View>
+
+            </View>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Uploaded by</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> {object.createdBy}</Text>
+              </View>
+
+            </View>
+
+            <View style={styles.dpaContainer}>
+              <View style={styles.titleView}>
+                <Text style={styles.subtitle}>Language</Text>
+              </View>
+
+              <View style={styles.detailView}>
+                <Text style={styles.detail}> English</Text>
+              </View>
+
+            </View>
+        <View style={styles.separator} />
+
+        <Text style={styles.sectionTitle}>Data Pricing Agreement</Text>
           {DPA_description}
 
        
@@ -152,15 +271,12 @@ var styles = StyleSheet.create({
     fontSize: 20,
     marginTop:20,
     marginLeft:20,
-    fontWeight: 'bold',
-    color:'#727272'
+    color:'#000000'
   },
   sectionTitle: {
-    flex: 1,
-    fontSize: 18,
+    fontSize: 16,
     marginLeft:10,
-    fontWeight: '500',
-    color:'#727272'
+    color:'#000000'
   },
   reviewView:{
     flexDirection:'row',
@@ -171,60 +287,34 @@ var styles = StyleSheet.create({
     borderRadius: 5,
     marginRight:50,
     marginLeft:20,
-    padding:10
+    padding:5,
   },
   review: {
     color:'#009688',
     textAlign:'center',
-    fontSize: 16,
+    fontSize: 15,
   },
   category:{
     fontSize: 12,
-    marginLeft:20,
+    marginLeft:30,
     color:'#727272',
   },
   description:{
-    fontSize: 15,
+    fontSize: 13,
     color:'#727272',
     marginLeft:15,
     marginRight:15,
-  },
-  rating: {
-    marginTop: 10,
-  },
-  ratingTitle: {
-    fontSize: 14,
-  },
-  ratingValue: {
-    fontSize: 28,
-    fontWeight: '500',
-  },
-  mpaaWrapper: {
-    alignSelf: 'flex-start',
-    borderColor: 'black',
-    borderWidth: 1,
-    paddingHorizontal: 3,
-    marginVertical: 5,
-  },
-  mpaaText: {
-    fontFamily: 'Palatino',
-    fontSize: 13,
-    fontWeight: '500',
+    marginTop:10,
+    marginBottom:10,
   },
   mainSection: {
     flexDirection: 'row',
   },
   detailsImage: {
-    width: 160,
-    height: 160,
+    width: 120,
+    height: 120,
     margin:10,
-    borderRadius: 50,
-  },
-  buttonImage: {
-    width: 80,
-    height: 20,
-    backgroundColor: '#eaeaea',
-    marginLeft: 10,
+    borderRadius: 20,
   },
   separator: {
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
@@ -233,16 +323,39 @@ var styles = StyleSheet.create({
     marginLeft:10,
     marginRight:10,
   },
-  dpaDetail: {
+  subtitle: {
+    color:'#BDBDBD',
+    textAlign:'right',
+    fontSize:12,
+  },
+  detail: {
     marginLeft: 15,
-    color:'#727272',
+    color:'#757575',
+    fontSize:12,
+    textAlign:'left',
+  },
+  urldetail: {
+    marginLeft: 15,
+    color:'#757575',
+    fontSize:12,
+    textAlign:'left',
+    textDecorationLine: 'underline'
   },
   scrollView: {
     backgroundColor: '#FFFFFF',
     marginTop:60,
     height:300
-
   },
+  titleView:{
+    flex:0.3
+  },
+  detailView:{
+    flex:0.7
+  },
+  dpaContainer:{
+    flex: 1, 
+    flexDirection: 'row',
+  }
   
 });
 

@@ -12,7 +12,7 @@ var {
   ActivityIndicator
 } = ReactNative;
 
-var IP_ADDRESS = 'http://100.77.188.59:3000';  
+var IP_ADDRESS = 'http://100.77.188.62:3000';  
 var REQUEST_URL = IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
 var FILENAME_URL = IP_ADDRESS+'/filename/appstore/';
@@ -98,7 +98,8 @@ class SearchPage extends Component {
       spinner=<View/>;
 
     return (
-      <View style={styles.container}>
+      <Image source={require('./img/color4.jpg')}
+        style={styles.container}>
         <Text style={styles.description}>
           Search for apps to download!
         </Text>
@@ -122,10 +123,8 @@ class SearchPage extends Component {
             <Text style={styles.buttonText}>Go</Text>
           </TouchableHighlight>
         </View>
-        <Image source={require('./img/app.png')} style={styles.image}/>
+        </Image>
 
-
-      </View>
     );
   }
 }
@@ -154,9 +153,11 @@ var styles = StyleSheet.create({
   },
   container: {
     flex:1,
-    padding:20,
+    width: undefined,
+    height: undefined,
+    backgroundColor:'transparent',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'#FFFFFF'
   },
   flowRight: {
     borderColor: 'grey',
@@ -180,11 +181,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#B2DFDB',
     textAlign: 'justify',
   },
-  image: {
-    marginTop:10,
-    width: 217,
-    height: 138
-  }
 });
 
 module.exports = SearchPage;

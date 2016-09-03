@@ -24,7 +24,9 @@ var SearchResults = require('./SearchResults');
 var Review = require('./Review');
 var ViewReview =require('./ViewReview');
 var Category =require('./Category');
+
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+
 var MD = require('react-native-material-design');
 var {
     Card, Button, Avatar, Drawer, Divider, COLOR, TYPO
@@ -47,7 +49,6 @@ class MainScreen extends Component{
     this.state={
       user:null,
       visible: false
-
     }
   }
 
@@ -61,11 +62,11 @@ class MainScreen extends Component{
         });
     };
 
-    hideModal = () => {
-        this.setState({
-            visible: false
-        });
-    };
+  hideModal = () => {
+      this.setState({
+          visible: false
+      });
+  };
 
 
   openDrawer() {
@@ -113,7 +114,7 @@ class MainScreen extends Component{
       }
 
       return <Part navigator = {navigator} route={router} />;
-      }
+  }
 
   onNavPress(target) {
         _navigator.push({
@@ -127,7 +128,7 @@ class MainScreen extends Component{
 
         this.refs['DRAWER'].closeDrawer();
     
-    }
+  }
 
   render() {
     var navigationView;
@@ -173,7 +174,9 @@ class MainScreen extends Component{
         </Drawer>
       );
     }
+
     if (this.state.user) {
+   
     var self_photo;
     if (this.state.user.photo !== null)
       {
@@ -260,7 +263,7 @@ class MainScreen extends Component{
                                         onPress={() => this.refs['DRAWER'].openDrawer()}>
                                         <Image
                                             source={require('./img/menu.png')}
-                                            style={{width: 30, height: 30, marginLeft: 8, marginRight: 8}} />
+                                            style={styles.navBarIcon} />
                                     </TouchableOpacity>
                                          );
                               default:
@@ -270,7 +273,7 @@ class MainScreen extends Component{
                                       onPress={() => {_navigator.pop()}}>
                                       <Image
                                          source={require('./img/return.png')}
-                                         style={{width: 30, height: 30, marginLeft: 10}} />
+                                         style={styles.navBarIcon} />
                                     </TouchableOpacity>
                                       );
                                     }
@@ -283,7 +286,7 @@ class MainScreen extends Component{
                                                  onPress={this.showModal}>
                                          <Image
                                             source={require('./img/about.png')}
-                                            style={{width: 35, height: 35, marginLeft: 10}} />
+                                            style={styles.navBarIcon} />
                                       </TouchableOpacity>
                                       <Modal 
                                         style={styles.modal}
@@ -357,11 +360,47 @@ class MainScreen extends Component{
                                    }, 
 
                       Title:(route, navigator, index, navState)=> {
-                                return (
-                                 <Text style={[styles.navBarText, styles.navBarTitleText]}>
-                                    {route.id}
-                                 </Text>
-                             );
+                                 switch (route.id) {
+                                    case 'OutlinePage':
+                                      return (
+                                      <Text style={styles.navBarText}>All Apps</Text>
+                                      );
+
+                                    case 'SearchPage':
+                                                  return (
+                                      <Text style={styles.navBarText}>Search</Text>
+                                      );
+                                    case 'DetailPage':
+                                                return (
+                                      <Text style={styles.navBarText}>Details</Text>
+                                      );   
+                                    case 'FrontPage':
+                                                  return (
+                                      <Text style={styles.navBarText}>Featured</Text>
+                                      );
+                                    case 'SearchResults':
+                                                 return (
+                                      <Text style={styles.navBarText}>Search Results</Text>
+                                      ); 
+                                    case 'Profile':
+                                                 return (
+                                      <Text style={styles.navBarText}>Your Profile</Text>
+                                      );
+                                    case 'Review':
+                                                  return (
+                                      <Text style={styles.navBarText}>Write A Review</Text>
+                                      );  
+                                    case 'ViewReview':
+                                                  return (
+                                      <Text style={styles.navBarText}>View Reviews</Text>
+                                      );  
+                                    case 'Category':
+                                                  return (
+                                      <Text style={styles.navBarText}>Category</Text>
+                                      ); 
+                               
+                                }
+                          
                           },
                       }}
                     />
@@ -440,22 +479,27 @@ var styles = StyleSheet.create({
         color:'#000000',
     },
     navBar: {
-        backgroundColor: '#009688',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
      },
     navBarText: {
-         color: 'white',
-         fontSize: 16,
-         marginVertical: 10,
-     },
-    navBarTitleText: {
-         fontWeight: '500',
-         marginVertical: 9,
-         color:"#FFFFFF"
+        fontWeight: 'bold',
+        marginLeft:70,
+        color: 'white',
+        fontSize: 18,
+        marginVertical: 10,
+        marginTop:12,
      },
     navBarLeftButton: {
          paddingLeft: 10,
          marginTop:5,
      },
+    navBarIcon:{
+        width: 30, 
+        height: 30, 
+        marginLeft: 8, 
+        marginRight: 8, 
+        marginTop:3
+    },
     navBarRightButton: {
          padding: 10,
          paddingTop: 5
@@ -469,7 +513,7 @@ var styles = StyleSheet.create({
         height: 100,
         marginTop: 20,
     },
-      button_01: {
+    button_01: {
         padding: 10
     },
     close: {

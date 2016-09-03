@@ -1,7 +1,6 @@
 'use strict';
 import React,{Component} from'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   ViewPagerAndroid,
@@ -20,7 +19,7 @@ var height = Dimensions.get('window').height; //full width
 var qu_height=height*0.4;
 
 var ViewPager = require('react-native-viewpager');
-var IP_ADDRESS = 'http://100.77.188.59:3000';    
+var IP_ADDRESS = 'http://100.77.188.62:3000';    
 var REQUEST_URL_01 =IP_ADDRESS+'/category/appstore/Game';
 var REQUEST_URL_02 =IP_ADDRESS+'/category/appstore/Social';
 
@@ -47,7 +46,6 @@ var source = [
   {title:'Books & Reference',icon:require('./img/19.png')},  
   {title:'Health & Fitness',icon:require('./img/20.png')}
 ];
-
 
 const BANNER_IMGS = [  
     require('./img/front01.png'),
@@ -146,7 +144,6 @@ class FrontPage extends Component {
         
   });
   }
-
 
   _renderPage(data, pageID) {  
       return (  
@@ -308,13 +305,7 @@ renderObjects(object){
       source={{uri:IMG_URL + object.img_id}}
       style={styles.appImg}
       />
-      <View style={styles.rightContainer}>
-        
-            <Text style={styles.appTitle}>{object.title}</Text>
-
-        <Text style={styles.appCategory}>{object.category}</Text>
-      </View>
-
+      <Text style={styles.appTitle}>{object.title}</Text>
     </View>
 </TouchableHighlight>
 
@@ -352,12 +343,11 @@ var styles = StyleSheet.create({
   },
   promotionStyle: {
     height: qu_height,
-    marginTop:50,
     width:width,
     flex:0.5
   },
   sectionTitle: {
-    fontSize: 15,
+    fontSize: 18,
     marginBottom: 8,
     textAlign: 'left',
     marginLeft:10,
@@ -373,20 +363,18 @@ var styles = StyleSheet.create({
     marginRight:10
   },
   listView: {
-    paddingTop: 10,
     backgroundColor: '#FFFFFF',
+    marginLeft:15,
     flex:0.4
   },
   appTitle: {
+    width: 81,
+    height:30,
     fontSize: 10,
+    marginLeft:7,
     marginBottom: 8,
     textAlign: 'center',
     color:'#727272'
-  },
-  appCategory: {
-    textAlign: 'center',
-    color:'#727272',
-    fontSize: 8,
   },
   appImg: {
     width: 81,
@@ -394,7 +382,6 @@ var styles = StyleSheet.create({
     marginLeft:10,
     marginBottom:10,
     borderRadius: 20,
-
   },
 });
 

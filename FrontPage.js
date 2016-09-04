@@ -19,7 +19,7 @@ var height = Dimensions.get('window').height; //full width
 var qu_height=height*0.4;
 
 var ViewPager = require('react-native-viewpager');
-var IP_ADDRESS = 'http://100.77.188.62:3000';    
+var IP_ADDRESS = 'http://100.77.188.44:3000';    
 var REQUEST_URL_01 =IP_ADDRESS+'/category/appstore/Game';
 var REQUEST_URL_02 =IP_ADDRESS+'/category/appstore/Social';
 

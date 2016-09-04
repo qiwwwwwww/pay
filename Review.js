@@ -85,6 +85,8 @@ class Review extends Component {
             rating={this.state.starCount}
             starSize={30}
             selectedStar={(rating) => this.onStarRatingPress(rating)}
+            starColor={'#ffa31a'}
+            emptyStarColor={'#757575'}
           />
           </View>
           <Text style={{color:'#757575', marginLeft: 140, fontSize:11}}>Tap a Star to Rate</Text>

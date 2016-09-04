@@ -18,7 +18,7 @@ import StarRating from 'react-native-star-rating';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 var width = Dimensions.get('window').width; //full width
-var REQUEST_URL='http://100.77.188.62:3000/comment/test6/';
+var REQUEST_URL='http://100.77.188.44:3000/comment/test6/';
 var C_URL;
 
 class Review extends Component {
@@ -111,7 +111,6 @@ var year = new Date(object.created_at).getFullYear();
         <View style={styles.starRate}>
           <StarRating
             disabled={true}
-            disabled={false}
             emptyStar={'ios-star-outline'}
             fullStar={'ios-star'}
             iconSet={'Ionicons'}
@@ -119,6 +118,8 @@ var year = new Date(object.created_at).getFullYear();
             rating={object.star}
             selectedStar={(rating) => this.onStarRatingPress(rating)}
             starSize={20}
+            starColor={'#ffa31a'}
+            emptyStarColor={'#ffa31a'}
           />
         </View>
         <View style={styles.name}>

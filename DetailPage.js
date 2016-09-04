@@ -14,8 +14,11 @@ import {
   ListView,
   WebView
 } from 'react-native';
+import StarRating from 'react-native-star-rating';
   
-var IMG_URL='http://100.77.188.62:3000/files/';
+var IMG_URL='http://100.77.188.44:3000/files/';
+var REQUEST_URL='http://100.77.188.44:3000/star/test6/';
+
 var OpenURLButton = React.createClass({
 
   propTypes: {
@@ -46,9 +49,38 @@ var OpenURLButton = React.createClass({
 });
 
 class DetailPage extends Component{
-  
+   constructor(props) {
+    super(props);
+    this.state = {
+       loaded: false,
+       starCount:0,
+       apptitle: this.props.route.passProps.Object.title,
+  };
+}
 
+componentDidMount() {
+    this.fetchData();
+  }
 
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating
+    });
+  }
+
+   fetchData(){
+    
+    fetch(REQUEST_URL+this.state.apptitle)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          starCount:responseData.starCount,
+          loaded: true,
+        });
+      })
+      .done();
+      
+  } 
   goComment(user){
     var object = this.props.route.passProps.Object;
   
@@ -193,7 +225,21 @@ class DetailPage extends Component{
             <View style={styles.rightPane}>
               <Text style={styles.title}>{object.title}</Text>
               <Text style={styles.category}>{object.category}</Text>
-
+              <View style={styles.starRate}>
+              <StarRating
+                disabled={true}
+                emptyStar={'ios-star-outline'}
+                fullStar={'ios-star'}
+                halfStar={'ios-star-half'}
+                iconSet={'Ionicons'}
+                maxStars={5}
+                rating={this.state.starCount}
+                selectedStar={(rating) => this.onStarRatingPress(rating)}
+                starSize={15}
+                starColor={'#ffa31a'}
+                emptyStarColor={'#ffa31a'}
+              />
+            </View>
               <OpenURLButton url={IMG_URL+object.apkid}/>
             </View>
           </View>
@@ -254,7 +300,6 @@ class DetailPage extends Component{
         <Text style={styles.sectionTitle}>Data Pricing Agreement</Text>
           {DPA_description}
 
-       
 	      </ScrollView>
     );
   }
@@ -355,7 +400,11 @@ var styles = StyleSheet.create({
   dpaContainer:{
     flex: 1, 
     flexDirection: 'row',
-  }
+  },
+  starRate:{
+    marginLeft:20,
+    marginRight:150,
+  },
   
 });
 

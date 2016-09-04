@@ -16,16 +16,114 @@ import {
 } from 'react-native';
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import {TabLayoutAndroid, TabAndroid} from "react-native-android-kit";
+import StarRating from 'react-native-star-rating';
+var REQUEST_URL='http://100.77.188.44:3000/mycomment/test6/';
 
 var width = Dimensions.get('window').width; //full width
 
 class Profile extends Component {
-    
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: new ListView.DataSource({
+         rowHasChanged: (row1, row2) => row1 !== row2,
+      }),
+       loaded: false,
+       starCount:0,
+       user: this.props.route.passProps.user,
+  };
+}  
 
+componentDidMount() {
+    this.fetchData();
+  }
+  
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating
+    });
+  }
+
+  fetchData(){
+    
+    fetch(REQUEST_URL+this.state.user.name)
+      .then((response) => response.json())
+      .then((responseData) => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(responseData.comment),
+          loaded: true,
+        });
+      })
+      .done();
+      
+  } 
+
+  renderLoadingView() {
+  return(
+    <View style={styles.container}>
+    <Text style={styles.warning}>
+    Loading comment...
+    </Text>
+    </View>
+    );
+  }
+
+   renderNoCommentView() {
+  return(
+    <View style={styles.container}>
+    <Text style={styles.warning}>
+        There is no comment yet.
+    </Text>
+    </View>
+    );
+}
+
+renderObjects(object){
+var date = new Date(object.created_at).getDate();
+var month = new Date(object.created_at).getMonth();
+var year = new Date(object.created_at).getFullYear();
+console.log('i am '+this.state.user);
+  return(
+    <View style={styles.commentContainer}>
+      <Text style={styles.titleText}>{object.title}</Text>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.starRate}>
+          <StarRating
+            disabled={true}
+            emptyStar={'ios-star-outline'}
+            fullStar={'ios-star'}
+            iconSet={'Ionicons'}
+            maxStars={5}
+            rating={object.star}
+            selectedStar={(rating) => this.onStarRatingPress(rating)}
+            starSize={20}
+            starColor={'#ffa31a'}
+            emptyStarColor={'#ffa31a'}
+          />
+        </View>
+        <View>
+          <Text style={styles.singleListView}>-{date}/{month}/{year}</Text>
+        </View>
+      </View>
+      <Text style={styles.comment}>{object.comment}</Text>
+      <View style={styles.separator} />
+
+    </View>
+        
+    );
+
+  }
 
 
   render(){
-      var User=this.props.route.passProps.user;
+    var rowCount =this.state.dataSource.getRowCount()
+        if(!this.state.loaded) {
+        return this.renderLoadingView();
+      }
+        if(rowCount==0 ){
+          return this.renderNoCommentView();
+       }   
+      var User=this.state.user;
       var self_photo;
       if (User.photo !== null)
       {
@@ -33,7 +131,7 @@ class Profile extends Component {
               <Image source={{uri: User.photo}}
                 style={styles.thumbnail}/>;
       } else{
-          self_photo=<Image source={require('./img/default.jpg')} 
+          self_photo=<Image source={require('./img/default.png')} 
                       style={styles.thumbnail}/> ;
 
       }
@@ -61,25 +159,21 @@ class Profile extends Component {
           <Text style={styles.section_content_one}> Email</Text>
           <Text style={styles.section_content_two}>{User.email}</Text>
           <View style={styles.separator} />
-
-          <TouchableOpacity onPress={() => {this._signOut(); }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10, color:'#727272'}}> Log Out </Text>
-          </TouchableOpacity>
           </View>
           </View>
-          </TabAndroid>
-
-          <TabAndroid text="Favorite" textSize={16} textColor="white" selectedTextColor="#727272"
-                icon="heart" iconPosition="top">
-            <ScrollView>
-            <Text>FloatingButtonAndroid Examples</Text>
-
-            </ScrollView>
           </TabAndroid>
 
           <TabAndroid text="Recent" textSize={16} textColor="white" selectedTextColor="#727272"
                 icon="fen" iconPosition="top">
+           <ScrollView>     
             <Text style={{color:'#727272'}}>Hello, I'm the last tab: nothing to show</Text>
+            <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderObjects.bind(this)}
+            style={styles.listView}
+            enableEmptySections={true}
+            />
+          </ScrollView>  
           </TabAndroid>
 
         </TabLayoutAndroid>
@@ -89,6 +183,9 @@ class Profile extends Component {
 
       );
     }
+
+  
+
   }
 
 
@@ -157,13 +254,49 @@ separator: {
   height: StyleSheet.hairlineWidth,
   marginVertical: 3,
 },
-button: {
-      backgroundColor: '#eeeeee',
-      padding: 10,
-      marginRight: 5,
-      marginLeft: 5,
+ commentContainer: {
+    marginLeft:20,
+    marginRight:20,
   },
+  listView: {
+    marginTop:80,
+  },
+  nameText:{
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#727272',
+    fontWeight:'bold',
+  },
+  titleText:{
+    textAlign: 'left',
+    fontSize: 25,
+    color:'#727272',
 
+  },
+  singleListView:{
+    textAlign: 'center',
+    fontSize: 15,
+    color:'#727272',
+  },
+  name:{
+    marginLeft:10,
+    marginRight:10,
+  },
+  comment:{
+    textAlign: 'left',
+    fontSize: 15,
+    color:'#727272',
+  },
+  starRate:{
+    marginLeft:10,
+    marginRight:10,
+  },
+  warning:{
+    marginTop:50,
+    fontSize:20,
+    textAlign: 'center',
+    color:'#727272',
+  }
 });
 
 

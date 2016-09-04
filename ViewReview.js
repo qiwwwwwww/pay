@@ -15,7 +15,6 @@ import {
   Alert
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 var width = Dimensions.get('window').width; //full width
 var REQUEST_URL='http://100.77.188.44:3000/comment/test6/';

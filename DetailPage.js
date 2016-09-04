@@ -17,7 +17,7 @@ import {
   
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import dismissKeyboard from 'dismissKeyboard'
+import dismissKeyboard from 'dismissKeyboard';
   
 var IMG_URL='http://100.77.188.44:3000/files/';
 var REQUEST_URL='http://100.77.188.44:3000/star/test6/';

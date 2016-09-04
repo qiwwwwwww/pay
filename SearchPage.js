@@ -9,13 +9,15 @@ var {
   Navigator,
   TouchableHighlight,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableWithoutFeedback
 } = ReactNative;
 
 var IP_ADDRESS = 'http://100.77.188.44:3000';  
 var REQUEST_URL = IP_ADDRESS+'/appstore';
 var IMG_URL=IP_ADDRESS+'/files/';
 var FILENAME_URL = IP_ADDRESS+'/filename/appstore/';
+const dismissKeyboard = require('dismissKeyboard')
 
 
 function urlForQueryAndPage(key, value) {
@@ -73,7 +75,7 @@ class SearchPage extends Component {
     .catch(error =>{
        this.setState({
         isLoading: false,
-        message: 'Something bad happened ' + error
+        message: 'Can not search for empty string. '
      });
        });
   }
@@ -98,88 +100,83 @@ class SearchPage extends Component {
       spinner=<View/>;
 
     return (
-      <Image source={require('./img/color4.jpg')}
-        style={styles.container}>
-        <Text style={styles.description}>
-          Search for apps to download!
-        </Text>
-        {spinner}
-        <Text style={styles.errorMessage}>{this.state.message}</Text>
-        <Text style={styles.tipMessage}>
-          Search by keywords.
-        </Text>
-        <View style={{flexDirection: 'row'}}>
-        <View style={styles.flowRight}>
-          <TextInput
-            style={styles.searchInput}
-            value={this.state.searchString}
-            onChange={this.onSearchTextChanged.bind(this)}
-            placeholder='Search via name'/>
-        </View>
+      <TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
+        <Image source={require('./img/poly.jpg')} style={styles.container}>
+            <View style={styles.textView}>
+              <Text style={styles.topMessage}>
+                  Search favorite apps to download!
+                </Text>
+                  {spinner}
+                <Text style={styles.errorMessage}>{this.state.message}</Text>
 
-          <TouchableHighlight style={styles.button}
-              onPress={this.onSearchPressed.bind(this)}
-              >
-            <Text style={styles.buttonText}>Go</Text>
-          </TouchableHighlight>
-        </View>
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                  <View style={styles.searchView}>
+                    <TextInput
+                      style={styles.searchInput}
+                      value={this.state.searchString}
+                      onChange={this.onSearchTextChanged.bind(this)}
+                      placeholder='Search via name'/>
+                  </View>
+                  <View style={styles.imageView}>
+                    <TouchableWithoutFeedback style={styles.button}
+                        onPress={this.onSearchPressed.bind(this)}>
+                      
+                      <Image source={require('./img/search.png')}
+                            style={{width: 45, height: 45, marginLeft:10,marginTop:5}} />
+
+                    </TouchableWithoutFeedback>
+                  </View>
+                </View>
+          </View>  
         </Image>
+
+
+       </TouchableWithoutFeedback> 
 
     );
   }
 }
 
 var styles = StyleSheet.create({
-  description: {
+  container: {
+    flex:1,
+    flexDirection:'row',
+    backgroundColor:'transparent',
+  },
+  textView:{
+    marginTop:100,
+  },
+  searchView:{
+    marginLeft:40,
+    flex:3,
+    borderRadius: 20,
+
+  },
+  imageView:{
+    flex:1,
+  },
+  topMessage: {
     marginBottom: 20,
-    fontSize: 18,
+    marginLeft:30,
+    fontSize: 20,
     textAlign: 'center',
-    color: '#656565',
-    marginTop: 65,
+    color: 'white',
+    fontWeight:'bold'
   },
   errorMessage: {
     marginBottom: 10,
     fontSize: 15,
     textAlign: 'center',
-    color: 'red',
+    color: 'white',
     marginTop: 50,
-  },
-  tipMessage: {
-    marginBottom: 20,
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#656565',
-    marginTop: 30,
-  },
-  container: {
-    flex:1,
-    width: undefined,
-    height: undefined,
-    backgroundColor:'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  flowRight: {
-    borderColor: 'grey',
-    borderWidth: 1,
-    marginLeft:30,
-    marginRight:10,
-    flex:4,
-  },
-  buttonText: {
-    color:'#FFFFFF',
-    textAlign: 'center',
   },
   button: {
       marginTop:10,
-      backgroundColor: '#757575',
-      padding: 10,
       borderRadius: 20,
-      flex:1,
   },
   searchInput: {
-    backgroundColor: '#B2DFDB',
-    textAlign: 'justify',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+
   },
 });
 

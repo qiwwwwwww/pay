@@ -12,7 +12,9 @@ import {
   TouchableOpacity,
   Linking,
   ListView,
-  WebView
+  WebView,
+  Alert,
+  
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import dismissKeyboard from 'dismissKeyboard'
@@ -20,34 +22,34 @@ import dismissKeyboard from 'dismissKeyboard'
 var IMG_URL='http://100.77.188.44:3000/files/';
 var REQUEST_URL='http://100.77.188.44:3000/star/test6/';
 
-var OpenURLButton = React.createClass({
+// var OpenURLButton = React.createClass({
 
-  propTypes: {
-    url: React.PropTypes.string,
-  },
+//   propTypes: {
+//     url: React.PropTypes.string,
+//   },
 
-  handleClick: function() {
-    Linking.canOpenURL(this.props.url).then(supported => {
-      if (supported) {
-        Linking.openURL(this.props.url);
-      } else {
-        console.log('Don\'t know how to open URI: ' + this.props.url);
-      }
-    });
-  },
+//   handleClick: function() {
+//     Linking.canOpenURL(this.props.url).then(supported => {
+//       if (supported) {
+//         Linking.openURL(this.props.url);
+//       } else {
+//         console.log('Don\'t know how to open URI: ' + this.props.url);
+//       }
+//     });
+//   },
 
-  render: function() {
-    return (
-      <TouchableOpacity
-        onPress={this.handleClick}>
-        <View style={{borderColor: '#009688',
-            borderWidth:1, marginBottom:20, marginLeft:120,marginRight:40,borderRadius: 5,}}>
-          <Text style={{color:'#009688',textAlign:'center', fontSize:15}}>GET</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
-});
+//   render: function() {
+//     return (
+//       <TouchableOpacity
+//         onPress={this.handleClick}>
+//         <View style={{borderColor: '#009688',
+//             borderWidth:1, marginBottom:20, marginLeft:120,marginRight:40,borderRadius: 5,}}>
+//           <Text style={{color:'#009688',textAlign:'center', fontSize:15}}>GET</Text>
+//         </View>
+//       </TouchableOpacity>
+//     );
+//   }
+// });
 
 class DetailPage extends Component{
    constructor(props) {
@@ -171,10 +173,14 @@ componentDidMount() {
               </View>
             </View>
 
+            <View style={styles.dpaContainer}>
+                <Text style={styles.scopesTitle}>Scopes: </Text>
+            </View>
+
 
             <View style={styles.dpaContainer}>
               <View style={styles.titleView}>
-                <Text style={styles.subtitle}>Scopes name</Text>
+                <Text style={styles.subtitle}> Name</Text>
               </View>
 
               <View style={styles.detailView}>
@@ -185,7 +191,7 @@ componentDidMount() {
 
             <View style={styles.dpaContainer}>
               <View style={styles.titleView}>
-                <Text style={styles.subtitle}>Scopes amount</Text>
+                <Text style={styles.subtitle}>Amount</Text>
               </View>
 
               <View style={styles.detailView}>
@@ -196,7 +202,7 @@ componentDidMount() {
 
             <View style={styles.dpaContainer}>
               <View style={styles.titleView}>
-                <Text style={styles.subtitle}>Scopes frequency</Text>
+                <Text style={styles.subtitle}>Frequency</Text>
               </View>
 
               <View style={styles.detailView}>
@@ -226,27 +232,40 @@ componentDidMount() {
             />
  
             <View style={styles.rightPane}>
+              
               <Text style={styles.title}>{object.title}</Text>
+              
               <Text style={styles.category}>{object.category}</Text>
+              
               <View style={styles.starRate}>
-              <StarRating
-                disabled={true}
-                emptyStar={'ios-star-outline'}
-                fullStar={'ios-star'}
-                halfStar={'ios-star-half'}
-                iconSet={'Ionicons'}
-                maxStars={5}
-                rating={this.state.starCount}
-                selectedStar={(rating) => this.onStarRatingPress(rating)}
-                starSize={15}
-                starColor={'#ffa31a'}
-                emptyStarColor={'#ffa31a'}
-              />
+                <StarRating
+                  disabled={true}
+                  emptyStar={'ios-star-outline'}
+                  fullStar={'ios-star'}
+                  halfStar={'ios-star-half'}
+                  iconSet={'Ionicons'}
+                  maxStars={5}
+                  rating={this.state.starCount}
+                  selectedStar={(rating) => this.onStarRatingPress(rating)}
+                  starSize={15}
+                  starColor={'#ffa31a'}
+                  emptyStarColor={'#ffa31a'}
+                />
+              </View>
+              <View style={styles.button}>
+              <Text style={styles.review}
+                  onPress={() => Alert.alert(
+                  'Download App',
+                  'Please Choose Data Pricing Agreement you want.',
+                    [
+                      {text: 'cancel'},
+                      {text: 'Service Id '+'2', onPress: () => Linking.openURL('http://www.google.com')},
+                      {text: 'Service Id '+object.service_id, onPress: () => Linking.openURL(IMG_URL+object.apkid)},
+                    ]
+                  )}>GET</Text>
+              </View>
             </View>
-              <OpenURLButton url={IMG_URL+object.apkid}/>
             </View>
-          </View>
-
           <View style={styles.separator} />
           <Text style={styles.sectionTitle}>Description</Text>
           <Text style={styles.description}>
@@ -302,7 +321,6 @@ componentDidMount() {
 
         <Text style={styles.sectionTitle}>Data Pricing Agreement</Text>
           {DPA_description}
-
 	      </ScrollView>
     );
   }
@@ -376,6 +394,12 @@ var styles = StyleSheet.create({
     textAlign:'right',
     fontSize:12,
   },
+  scopesTitle: {
+    color:'#BDBDBD',
+    fontSize:12,
+    marginLeft:20,
+  },
+
   detail: {
     marginLeft: 15,
     color:'#757575',
@@ -408,7 +432,10 @@ var styles = StyleSheet.create({
     marginLeft:20,
     marginRight:150,
   },
-  
+  wrapper: {
+    borderRadius: 5,
+    marginBottom: 5,
+  },
 });
 
 module.exports = DetailPage;

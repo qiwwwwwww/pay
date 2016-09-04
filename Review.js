@@ -10,12 +10,14 @@ import {
   Dimensions,
   TextInput,
   TouchableHighlight,
-  Alert
+  Alert,
+  TouchableWithoutFeedback
 } from 'react-native';
+const dismissKeyboard = require('dismissKeyboard')
 
 import StarRating from 'react-native-star-rating';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+REQUEST_URL="http://100.77.188.44:3000/test6"
 var width = Dimensions.get('window').width; //full width
 
 class Review extends Component {
@@ -34,9 +36,24 @@ class Review extends Component {
     });
   }
 
+  goDetail(){
+    var object = this.props.route.passProps.Object;
+    var user = this.props.route.passProps.User;
+
+    this.props.navigator.push({
+
+    id:'DetailPage',
+    title:'DetailPage',
+        passProps:{
+          User:user,
+          Object: object,
+
+        }
+  });
+}
   _onPressButtonPOST() {
       if(this.state.comment!==''){
-        fetch("http://100.77.188.62:3000/test6", {
+        fetch(REQUEST_URL, {
           method: "POST", 
           body: JSON.stringify({
             name: this.props.route.passProps.User.name,
@@ -55,7 +72,10 @@ class Review extends Component {
         .then((responseData) => {
             Alert.alert(
                 "You have successfully write a comment for this app",
-                "Please go to view reviews to see your comment " 
+                "Please go to view reviews to see your comment ",
+              [
+              {text: 'OK', onPress: () => this.goDetail()},
+            ]   
             )
         })
         .done();
@@ -70,10 +90,12 @@ class Review extends Component {
         var user = this.props.route.passProps.User;
 
       return (
+        <TouchableWithoutFeedback onPress={()=> dismissKeyboard()}>
+
         <View style={styles.container}>
           <TouchableHighlight onPress={this._onPressButtonPOST.bind(this)} style={styles.button}>
                 <Image source={require('./img/post.png')}
-                  style={{width: 30, height: 30, marginLeft: 300, marginRight: 8}} />
+                  style={{width: 30, height: 30,}} />
           </TouchableHighlight>
           <View style={styles.starRate}>
           <StarRating
@@ -120,6 +142,8 @@ class Review extends Component {
             </View>
 
         </View>
+        </TouchableWithoutFeedback>
+
       );
     }
   }
@@ -151,7 +175,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   button: {
-      padding: 10,
+       marginLeft: 300, 
+       marginRight: 8
   },
   starRate:{
     marginLeft:80,

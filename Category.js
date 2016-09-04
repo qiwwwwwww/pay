@@ -18,6 +18,7 @@ import {
 var IP_ADDRESS = 'http://100.77.188.44:3000';    
 var REQUEST_URL =IP_ADDRESS+'/category/appstore/';
 var IMG_URL=IP_ADDRESS+'/files/';
+import dismissKeyboard from 'dismissKeyboard'
 
 class OutlinePage extends Component {
     constructor(props) {
@@ -50,6 +51,7 @@ class OutlinePage extends Component {
   }
 
 render() {
+  dismissKeyboard();
   console.log(this.props.route.passProps.user);
   if(!this.state.loaded) {
     return this.renderLoadingView();

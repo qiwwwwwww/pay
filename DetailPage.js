@@ -15,6 +15,7 @@ import {
   WebView
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
+import dismissKeyboard from 'dismissKeyboard'
   
 var IMG_URL='http://100.77.188.44:3000/files/';
 var REQUEST_URL='http://100.77.188.44:3000/star/test6/';
@@ -114,6 +115,7 @@ componentDidMount() {
 	render(){
     var object = this.props.route.passProps.Object;
     var user = this.props.route.passProps.User;
+    dismissKeyboard();
 
     var DPA_description;
         if(object.scopes){
@@ -214,7 +216,8 @@ componentDidMount() {
 
 
     return (
-	      <ScrollView style={styles.scrollView}>
+
+	      <ScrollView style={styles.scrollView} >
 	        <View style={styles.mainSection}>
   
             <Image

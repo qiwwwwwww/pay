@@ -485,7 +485,7 @@ var styles = StyleSheet.create({
         fontWeight: 'bold',
         marginLeft:70,
         color: 'white',
-        fontSize: 18,
+        fontSize: 20,
         marginVertical: 10,
         marginTop:12,
      },
@@ -498,7 +498,7 @@ var styles = StyleSheet.create({
         height: 30, 
         marginLeft: 8, 
         marginRight: 8, 
-        marginTop:3
+        marginTop:8,
     },
     navBarRightButton: {
          padding: 10,
